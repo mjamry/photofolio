@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {makeStyles} from '@material-ui/core/styles'
-import Loader, {LoaderActions} from './Loader'
-
+import Loader from './Loader'
 
 type Props = {
     imageSrc: string
@@ -43,39 +42,48 @@ const useStyles = makeStyles({
       imageContainer: {
         height: '80vh',
         width: '80vw',
-        border: 'solid 1px black'
+        border: 'solid 1px black',
+        gridColumn: 1,
+        gridRow: 1
       },
+      loaderContainer: {
+        height: '80vh',
+        width: '80vw',
+        border: 'solid 1px black',
+        gridColumn: 1,
+        gridRow: 1,
+        zIndex: 999
+      },
+      container: {
+          display: 'grid'
+      }
 })
 
 const ImageViewer = (props: Props) => {
-    const [isLoading, setIsLoading] = useState<boolean>();
-    const [loaderAction, setLoaderAction] = useState<LoaderActions>(LoaderActions.none);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(()=>{
         setIsLoading(true);
-        console.log(isLoading);
-        setLoaderAction(LoaderActions.fadeIn)
     }, [props.imageSrc])
 
     const handleIsLoaded = ():void => {
         setIsLoading(false);
-        console.log("loaded")
-        setLoaderAction(LoaderActions.fadeOut)
-        
     }
 
     const classes = useStyles();
     return (
-
-        <div className={classes.imageContainer}>
-        <Loader action={loaderAction} />
-        <img src={props.imageSrc} 
-            className={classes.image} 
-            onLoad={()=>handleIsLoaded()}
-            onError={()=>console.log("error")}
-          />
-        
-      </div>
+        <div className={classes.container}>
+            <div className={classes.loaderContainer}>
+                <Loader numberOfElements={4} show={isLoading}/> 
+            </div>
+            <div className={classes.imageContainer}>
+                <img src={props.imageSrc} 
+                    className={classes.image} 
+                    onLoad={()=>handleIsLoaded()}
+                    onError={()=>console.log("error")}
+                    />
+            </div>
+        </div>
     )
 }
 
