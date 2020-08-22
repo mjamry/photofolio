@@ -1,61 +1,32 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles'
-
-enum LoaderActions{
-    fadeIn,
-    fadeOut,
-    none
-}
-
-type Propsa = {
-    action: LoaderActions
-}
+import LoaderElement, { LoaderActions } from './LoaderElement';
 
 const useStyles = makeStyles({
     container: {
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
-    },
-    loader: {
-        backgroundColor: 'black',
-        width: '50%',
-    },
-    fadeIn: {
-        animation: `$fadeIn .75s cubic-bezier(.85, 0, .15, 1)`,
-        height: '100%',
-    },
-    fadeOut: {
-        animation: `$fadeOut .75s cubic-bezier(.85, 0, .15, 1)`,
-        height: '0'
-    },
-    "@keyframes fadeIn": {
-        from: {
-            height: '0'
-        },
-        to: {
-            height: '100%'
-        }
-    },
-    "@keyframes fadeOut": {
-        from: {
-            height: '100%'
-        },
-        to: {
-            height: '0'
-        }
+        display: 'flex',
+        flexFlow: 'row',
+        height: '100%'
     }
 })
 
-const Loader = (props: Propsa) => {
+type Props = {
+    numberOfElements: number,
+    show: boolean
+}
+
+const Loader = (props: Props) => {
     const classes = useStyles()
-    console.log(props.action)
+    const {show} = props;
+    
     return (
         <div className={classes.container}>
-            <div className={`${classes.loader} ${props.action === LoaderActions.fadeIn ? classes.fadeIn : classes.fadeOut}`}>.</div>
+            <LoaderElement action={show ? LoaderActions.fadeIn : LoaderActions.fadeOut} delayInMs={0} />
+            <LoaderElement action={show ? LoaderActions.fadeIn : LoaderActions.fadeOut} delayInMs={300} />
+            <LoaderElement action={show ? LoaderActions.fadeIn : LoaderActions.fadeOut} delayInMs={600} />
+            <LoaderElement action={show ? LoaderActions.fadeIn : LoaderActions.fadeOut} delayInMs={900} />
         </div>
     )
 }
 
 export default Loader
-export {LoaderActions}
