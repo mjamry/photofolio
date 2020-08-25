@@ -9,7 +9,8 @@ enum LoaderActions{
 
 type Props = {
     action: LoaderActions,
-    delayInMs: number
+    delayInMs: number,
+    id: number,
 }
 
 const useStyles = makeStyles({
@@ -20,16 +21,17 @@ const useStyles = makeStyles({
     loader: {
         backgroundColor: 'black',
     },
-    hidden: {
-        display: 'none'
+    fadeInAnimation: {
+        animationName: `$fadeIn`,
+        animationFillMode: 'both',
+        animationDuration: '.75s',
+        animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
     },
-    fadeIn: {
-        animation: `$fadeIn .75s cubic-bezier(.85, 0, .15, 1)`,
-        height: '100%',
-    },
-    fadeOut: {
-        animation: `$fadeOut .75s cubic-bezier(.85, 0, .15, 1)`,
-        height: '0'
+    fadeOutAnimation: {
+        animationName: `$fadeOut`,
+        animationFillMode: 'both',
+        animationDuration: '.75s',
+        animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
     },
     "@keyframes fadeIn": {
         from: {
@@ -55,21 +57,21 @@ const LoaderElement = (props: Props) => {
 
     const show = () => {
         setIsVisible(true)
-        console.log("visible");
+        console.log(new Date().toISOString()+` display ${props.id}, action: ${props.action}`)
     }
 
     useEffect(() => {
         let timer = setTimeout(()=>show(), props.delayInMs)
-        console.log(timer)
-        console.log(props.delayInMs)
         return () => {
             clearTimeout(timer)
         }
-    }, [props.action])
+    }, [])
 
     return (
-        <div className={`${classes.container} ${!isVisible && classes.hidden}`}>
-            <div className={`${classes.loader} ${props.action === LoaderActions.fadeIn ? classes.fadeIn : classes.fadeOut}`}>.</div>
+        <div className={`${classes.container}`}>
+            {isVisible && 
+                <div className={`${classes.loader} ${props.action === LoaderActions.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation}`} />
+            }
         </div>
     )
 }
