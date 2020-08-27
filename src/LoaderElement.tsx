@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
+import {Theme} from '@material-ui/core'
 
 enum LoaderActions{
     fadeIn,
@@ -11,27 +12,31 @@ type Props = {
     action: LoaderActions,
     delayInMs: number,
     id: number,
+    width: string, 
+    backgroundColor: string
 }
 
-const useStyles = makeStyles({
-    container: {
+const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
+    container: props => ({
         height: '100%',
-        width: '25%',
-    },
-    loader: {
-        backgroundColor: 'black',
-    },
+        width: props.width,
+    }),
+    loader: props => ({
+        backgroundColor: props.backgroundColor,
+    }),
     fadeInAnimation: {
-        animationName: `$fadeIn`,
+        animationName: '$fadeIn',
         animationFillMode: 'both',
-        animationDuration: '.75s',
+        animationDuration: '.5s',
         animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
+        //animationDelay: `${props.delayInSec}s`,
     },
     fadeOutAnimation: {
         animationName: `$fadeOut`,
         animationFillMode: 'both',
-        animationDuration: '.75s',
+        animationDuration: '.5s',
         animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
+       // animationDelay: `${props.delayInSec}s`,
     },
     "@keyframes fadeIn": {
         from: {
@@ -48,12 +53,16 @@ const useStyles = makeStyles({
         to: {
             height: '0'
         }
-    }
-})
+    },
+    white: props => ({
+        backgroundColor: props.backgroundColor
+    })
+}))
 
 const LoaderElement = (props: Props) => {
-    const classes = useStyles()
+    const classes = useStyles(props)
     const [isVisible, setIsVisible] = useState(false)
+
 
     const show = () => {
         setIsVisible(true)
@@ -68,7 +77,7 @@ const LoaderElement = (props: Props) => {
     }, [])
 
     return (
-        <div className={`${classes.container}`}>
+        <div className={`${classes.container} ${!isVisible && props.action !== LoaderActions.fadeIn && classes.white}`}>
             {isVisible && 
                 <div className={`${classes.loader} ${props.action === LoaderActions.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation}`} />
             }
