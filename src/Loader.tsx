@@ -12,7 +12,8 @@ const useStyles = makeStyles({
 
 type Props = {
     numberOfElements: number,
-    show: boolean
+    show: boolean,
+    color: string
 }
 
 const DELAY_BETWEEN_ELEMENTS_IN_MS = 100;
@@ -30,7 +31,10 @@ const Loader = (props: Props) => {
                 action={show ? LoaderActions.fadeIn : LoaderActions.fadeOut} 
                 delayInMs={i*DELAY_BETWEEN_ELEMENTS_IN_MS} 
                 key={index}
-                id={index}/>)
+                id={index}
+                width={`${100/numberOfElements}%`}
+                backgroundColor={props.color}
+                />)
 
                 console.log(new Date().toISOString()+' render '+index)
         }
@@ -39,7 +43,7 @@ const Loader = (props: Props) => {
 
     useEffect(()=> {
         setElements(renderElements(props.numberOfElements))
-    }, [props.show])
+    }, [show])
     
     return (
         <div className={classes.container}>
