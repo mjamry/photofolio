@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {makeStyles} from '@material-ui/core/styles'
 import Loader from './Loader'
+import { useAppState } from '../state/AppState'
+import { AnimationStep } from '../state/StateTypes'
 
 type Props = {
     imageSrc: string
@@ -47,7 +49,8 @@ const useStyles = makeStyles({
         height: SETTINGS.height,
         width: SETTINGS.width,
         gridColumn: 1,
-        gridRow: 1
+        gridRow: 1,
+        clipPath: 'polygon(0 100%, 100% 100%, 100% 0, 0 0)'
     },
     loaderContainer: {
         height: SETTINGS.height,
@@ -65,15 +68,57 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: '10vh',
+    },
+    animationZoomIn: {
+        animationName: `$zoomIn`,
+        animationDuration: '.7s',
+        animationTimingFunction: 'cubic-bezier(.90, 0, .30, 1)',
+    },
+    "@keyframes zoomIn": {
+        from:{
+            transform: 'scale(2.0)'
+        },
+        to: {
+            transform: 'scale(1.0)'
+        }
+    },
+    animationZoomOut: {
+        animationName: `$zoomOut`,
+        animationDuration: '.7s',
+        animationTimingFunction: 'cubic-bezier(.30, 0, .90, 1)',
+    },
+    "@keyframes zoomOut": {
+        from:{
+            transform: 'scale(1.0)'
+        },
+        to: {
+            transform: 'scale(2.0)'
+        }
     }
 })
 
 const ImageViewer = (props: Props) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {state, dispatch} = useAppState()
+    const [animationClass, setAnimationClass] = useState("")
 
     useEffect(()=>{
         setIsLoading(true);
     }, [props.imageSrc])
+
+    useEffect(()=>{
+        let animation = ""
+        switch(state.animation.currentStep){
+            case AnimationStep.fadeIn:
+                animation = classes.animationZoomOut
+                break;
+            case AnimationStep.fadeOut:
+                animation = classes.animationZoomIn
+                break;
+        }
+        setAnimationClass(animation)
+        console.log("Image: "+animation)
+    }, [state.animation.currentStep])
 
     const handleIsLoaded = ():void => {
         setIsLoading(false);
@@ -86,9 +131,9 @@ const ImageViewer = (props: Props) => {
                 <div className={classes.loaderContainer}>
                     <Loader numberOfElements={5} color="white" show={isLoading}/> 
                 </div>
-                <div className={classes.imageContainer}>
+                <div className={`${classes.imageContainer}`} >
                     <img src={props.imageSrc} 
-                        className={classes.image} 
+                        className={`${classes.image} ${animationClass}`} 
                         onLoad={()=>handleIsLoaded()}
                         onError={(e)=>console.log(e)}
                         />
