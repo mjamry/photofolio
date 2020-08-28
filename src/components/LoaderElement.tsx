@@ -27,7 +27,7 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
     animation: props => ({
         animationFillMode: 'both',
         animationDuration: props.duration,
-        animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
+        animationTimingFunction: 'cubic-bezier(.90, 0, .30, 1)',
         animationDelay: props.delay,
     }),
     fadeInAnimation: {
