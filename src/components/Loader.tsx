@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
 import LoaderElement, { LoaderActions } from './LoaderElement';
+import { setTimeout } from 'timers';
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles({
     container: {
         display: 'flex',
         flexFlow: 'row',
         height: '100%',
+    },
+    loaderContainer:{
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'white',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
@@ -16,38 +26,78 @@ type Props = {
     color: string
 }
 
-const DELAY_BETWEEN_ELEMENTS_IN_MS = 50;
+type Settings = {
+    delay: number,
+    duration: number,
+}
+
+const settings: Settings = {
+    delay: 100,
+    duration: 500,
+}
 
 const Loader = (props: Props) => {
     const classes = useStyles()
     const {show} = props;
     const [elements, setElements] = useState<JSX.Element[]>([]);
+    const [action, setAction] = useState<LoaderActions>(LoaderActions.none);
+    const [timer, setTimer] = useState<any | null>(null);
 
-    const renderElements = (numberOfElements: number):JSX.Element[] => {
+    const animationDuration = 
+        //props.numberOfElements*settings.duration 
+        + ((0+(props.numberOfElements-1)*settings.delay)/2)*(props.numberOfElements-1)
+
+
+    const renderElements = (numberOfElements: number, action: LoaderActions):JSX.Element[] => {
         var output = [];
         for (let i = 0; i < numberOfElements; i++){
-            const index = Date.now()+i;
             output.push(<LoaderElement 
-                action={show ? LoaderActions.fadeIn : LoaderActions.fadeOut} 
-                delayInMs={i*DELAY_BETWEEN_ELEMENTS_IN_MS} 
-                key={index}
-                id={index}
+                action={action} 
+                key={i}
+                id={i}
                 width={`${100/numberOfElements}%`}
-                backgroundColor={props.color}
+                color={props.color}
+                delay={`${i*settings.delay/1000}s`}
+                duration={`${settings.duration/1000}s`}
                 />)
-
-                console.log(new Date().toISOString()+' render '+index)
         }
         return output;
     }
 
     useEffect(()=> {
-        setElements(renderElements(props.numberOfElements))
+        clearTimeout(timer)
+        if(show){
+            setAction(LoaderActions.fadeIn)
+            const timer = setTimeout(()=>setAction(LoaderActions.loading), animationDuration);
+            setTimer(timer);
+        }else{
+            setAction(LoaderActions.fadeOut)
+            const timer = setTimeout(()=>setAction(LoaderActions.none), animationDuration);
+            setTimer(timer);
+        }
+        
     }, [show])
-    
+
+    useEffect(()=>{
+        console.log(LoaderActions[action])
+    }, [action])
+
+    const renderContent = () => {
+        switch(action){
+            case LoaderActions.fadeIn:
+            case LoaderActions.fadeOut:
+                return renderElements(props.numberOfElements, action)
+            case LoaderActions.loading:
+                return <div className={classes.loaderContainer}><CircularProgress /></div>
+            case LoaderActions.none:
+            default:
+                return <></>
+        }
+    }
+
     return (
         <div className={classes.container}>
-            {elements}
+            {renderContent()}
         </div>
     )
 }

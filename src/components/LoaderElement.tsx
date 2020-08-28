@@ -5,15 +5,20 @@ import {Theme} from '@material-ui/core'
 enum LoaderActions{
     fadeIn,
     fadeOut,
+    loading,
     none
 }
 
-type Props = {
+type Props = UIProps & {
     action: LoaderActions,
-    delayInMs: number,
     id: number,
-    width: string, 
-    backgroundColor: string
+}
+
+type UIProps = {
+    delay: string,
+    duration: string,
+    color: string,
+    width: string,
 }
 
 const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
@@ -22,21 +27,19 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
         width: props.width,
     }),
     loader: props => ({
-        backgroundColor: props.backgroundColor,
+        backgroundColor: props.color,
+    }),
+    animation: props => ({
+        animationFillMode: 'both',
+        animationDuration: props.duration,
+        animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
+        animationDelay: props.delay,
     }),
     fadeInAnimation: {
         animationName: '$fadeIn',
-        animationFillMode: 'both',
-        animationDuration: '.5s',
-        animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
-        //animationDelay: `${props.delayInSec}s`,
     },
     fadeOutAnimation: {
         animationName: `$fadeOut`,
-        animationFillMode: 'both',
-        animationDuration: '.5s',
-        animationTimingFunction: 'cubic-bezier(.85, 0, .15, 1)',
-       // animationDelay: `${props.delayInSec}s`,
     },
     "@keyframes fadeIn": {
         from: {
@@ -54,33 +57,22 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
             height: '0'
         }
     },
-    white: props => ({
-        backgroundColor: props.backgroundColor
-    })
 }))
 
 const LoaderElement = (props: Props) => {
     const classes = useStyles(props)
-    const [isVisible, setIsVisible] = useState(false)
+    const animationClass = props.action === LoaderActions.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation
 
+    console.log(new Date().toISOString()+` | ${props.id} ${props.delay} ${props.duration} ${props.action} `)
 
-    const show = () => {
-        setIsVisible(true)
-        console.log(new Date().toISOString()+` display ${props.id}, action: ${props.action}`)
-    }
-
-    useEffect(() => {
-        let timer = setTimeout(()=>show(), props.delayInMs)
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [])
 
     return (
-        <div className={`${classes.container} ${!isVisible && props.action !== LoaderActions.fadeIn && classes.white}`}>
-            {isVisible && 
-                <div className={`${classes.loader} ${props.action === LoaderActions.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation}`} />
-            }
+        <div className={classes.container}>
+                <div className={`
+                ${classes.loader} 
+                ${animationClass}
+                ${classes.animation}`} 
+                />
         </div>
     )
 }
