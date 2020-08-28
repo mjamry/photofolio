@@ -2,15 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
 import {Theme} from '@material-ui/core'
 
-enum LoaderActions{
-    fadeIn,
-    fadeOut,
-    loading,
-    none
-}
+import {AnimationStep} from './../state/StateTypes'
 
 type Props = UIProps & {
-    action: LoaderActions,
+    action: AnimationStep,
     id: number,
 }
 
@@ -61,9 +56,9 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
 
 const LoaderElement = (props: Props) => {
     const classes = useStyles(props)
-    const animationClass = props.action === LoaderActions.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation
+    const animationClass = props.action === AnimationStep.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation
 
-    console.log(new Date().toISOString()+` | ${props.id} ${props.delay} ${props.duration} ${props.action} `)
+   // console.log(new Date().toISOString()+` | ${props.id} ${props.delay} ${props.duration} ${props.action} `)
 
 
     return (
@@ -78,4 +73,3 @@ const LoaderElement = (props: Props) => {
 }
 
 export default LoaderElement
-export {LoaderActions}

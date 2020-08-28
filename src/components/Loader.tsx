@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
-import LoaderElement, { LoaderActions } from './LoaderElement';
+import LoaderElement from './LoaderElement';
 import { setTimeout } from 'timers';
 import CircularProgress from '@material-ui/core/CircularProgress'
+import {useAppState} from './../state/AppState'
+import {Actions, AnimationStep} from './../state/StateTypes'
 
 const useStyles = makeStyles({
     container: {
@@ -39,16 +41,16 @@ const settings: Settings = {
 const Loader = (props: Props) => {
     const classes = useStyles()
     const {show} = props;
-    const [elements, setElements] = useState<JSX.Element[]>([]);
-    const [action, setAction] = useState<LoaderActions>(LoaderActions.none);
     const [timer, setTimer] = useState<any | null>(null);
+
+    const {state, dispatch} = useAppState()
 
     const animationDuration = 
         //props.numberOfElements*settings.duration 
         + ((0+(props.numberOfElements-1)*settings.delay)/2)*(props.numberOfElements-1)
 
 
-    const renderElements = (numberOfElements: number, action: LoaderActions):JSX.Element[] => {
+    const renderElements = (numberOfElements: number, action: AnimationStep):JSX.Element[] => {
         var output = [];
         for (let i = 0; i < numberOfElements; i++){
             output.push(<LoaderElement 
@@ -64,32 +66,42 @@ const Loader = (props: Props) => {
         return output;
     }
 
+    const setAction = (action: AnimationStep) => {
+        dispatch({type: Actions.setAnimationStep, payload: action})
+    }
+
     useEffect(()=> {
         clearTimeout(timer)
         if(show){
-            setAction(LoaderActions.fadeIn)
-            const timer = setTimeout(()=>setAction(LoaderActions.loading), animationDuration);
+            setAction(AnimationStep.fadeIn)
+            const timer = setTimeout(
+                ()=>setAction(AnimationStep.loading), 
+                animationDuration
+            );
             setTimer(timer);
         }else{
-            setAction(LoaderActions.fadeOut)
-            const timer = setTimeout(()=>setAction(LoaderActions.none), animationDuration);
+            setAction(AnimationStep.fadeOut)
+            const timer = setTimeout(
+                ()=>setAction(AnimationStep.none),
+                animationDuration
+            );
             setTimer(timer);
         }
         
     }, [show])
 
     useEffect(()=>{
-        console.log(LoaderActions[action])
-    }, [action])
+        console.log(AnimationStep[state.animation.currentStep])
+    }, [state.animation.currentStep])
 
     const renderContent = () => {
-        switch(action){
-            case LoaderActions.fadeIn:
-            case LoaderActions.fadeOut:
-                return renderElements(props.numberOfElements, action)
-            case LoaderActions.loading:
+        switch(state.animation.currentStep){
+            case AnimationStep.fadeIn:
+            case AnimationStep.fadeOut:
+                return renderElements(props.numberOfElements, state.animation.currentStep)
+            case AnimationStep.loading:
                 return <div className={classes.loaderContainer}><CircularProgress /></div>
-            case LoaderActions.none:
+            case AnimationStep.none:
             default:
                 return <></>
         }
