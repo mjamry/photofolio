@@ -32,6 +32,10 @@ interface Image {
   
   Image.prototype.completedPercentage = 0;
   
+  const SETTINGS = {
+      height: '80vh',
+      width: 'calc(80vh*1.5)',
+  }
 
 const useStyles = makeStyles({
     image: {
@@ -40,14 +44,14 @@ const useStyles = makeStyles({
         objectFit: 'cover'
       },
       imageContainer: {
-        height: '80vh',
-        width: '80vw',
+        height: SETTINGS.height,
+        width: SETTINGS.width,
         gridColumn: 1,
         gridRow: 1
       },
       loaderContainer: {
-        height: '80vh',
-        width: '80vw',
+        height: SETTINGS.height,
+        width: SETTINGS.width,
         gridColumn: 1,
         gridRow: 1,
         zIndex: 999
@@ -81,7 +85,7 @@ const ImageViewer = (props: Props) => {
         <div className={classes.container}>
             <div className={classes.contentContainer}>
                 <div className={classes.loaderContainer}>
-                    <Loader numberOfElements={6} color="white" show={isLoading}/> 
+                    <Loader numberOfElements={5} color="white" show={isLoading}/> 
                 </div>
                 <div className={classes.imageContainer}>
                     <img src={props.imageSrc} 

@@ -16,7 +16,7 @@ type Props = {
     color: string
 }
 
-const DELAY_BETWEEN_ELEMENTS_IN_MS = 100;
+const DELAY_BETWEEN_ELEMENTS_IN_MS = 50;
 
 const Loader = (props: Props) => {
     const classes = useStyles()
