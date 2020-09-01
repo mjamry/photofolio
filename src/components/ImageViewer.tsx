@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import {makeStyles} from '@material-ui/core/styles'
 import Loader from './Loader'
 import { useAnimationState } from '../state/AppState'
 import { AnimationStep } from '../state/AnimationState'
+import {Theme} from '@material-ui/core'
 
-type Props = {
+type Props = UIProps & {
     imageSrc: string
+}
+
+type UIProps = {
+    height: string,
+    width: string,
+    timingFunction: string,
+    duration: string
 }
 
 const SETTINGS = {
@@ -14,26 +21,26 @@ const SETTINGS = {
     width: 'calc(80vh*1.5)',
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles<Theme, Props>({
     image: {
         height: '100%',
         width: '100%',
         objectFit: 'cover'
       },
-    imageContainer: {
-        height: SETTINGS.height,
-        width: SETTINGS.width,
+    imageContainer: props => ({
+        height: props.height,
+        width: props.width,
         gridColumn: 1,
         gridRow: 1,
         clipPath: 'polygon(0 100%, 100% 100%, 100% 0, 0 0)'
-    },
-    loaderContainer: {
-        height: SETTINGS.height,
-        width: SETTINGS.width,
+    }),
+    loaderContainer: props => ({
+        height: props.height,
+        width: props.width,
         gridColumn: 1,
         gridRow: 1,
         zIndex: 999
-    },
+    }),
     contentContainer: {
         display: 'grid',
         boxShadow: "0 2.8px 2.2px rgba(0, 0, 0, 0.034),0 6.7px 5.3px rgba(0, 0, 0, 0.048),0 12.5px 10px rgba(0, 0, 0, 0.06),0 22.3px 17.9px rgba(0, 0, 0, 0.072),0 41.8px 33.4px rgba(0, 0, 0, 0.086),0 100px 80px rgba(0, 0, 0, 0.12)",
@@ -46,8 +53,6 @@ const useStyles = makeStyles({
     },
     animationZoomIn: {
         animationName: `$zoomIn`,
-        animationDuration: '.7s',
-        animationTimingFunction: 'cubic-bezier(.90, 0, .30, 1)',
     },
     "@keyframes zoomIn": {
         from:{
@@ -59,9 +64,11 @@ const useStyles = makeStyles({
     },
     animationZoomOut: {
         animationName: `$zoomOut`,
-        animationDuration: '.7s',
-        animationTimingFunction: 'cubic-bezier(.30, 0, .90, 1)',
     },
+    animation: props => ({
+        animationDuration: props.duration,
+        animationTimingFunction: props.timingFunction,
+    }),
     "@keyframes zoomOut": {
         from:{
             transform: 'scale(1.0)'
@@ -75,6 +82,7 @@ const useStyles = makeStyles({
 const ImageViewer = (props: Props) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [animationClass, setAnimationClass] = useState("")
+    const classes = useStyles(props);
 
     const animationState = useAnimationState()
 
@@ -100,7 +108,6 @@ const ImageViewer = (props: Props) => {
         setIsLoading(false);
     }
 
-    const classes = useStyles();
     return (
         <div className={classes.container}>
             <div className={classes.contentContainer}>
@@ -109,7 +116,7 @@ const ImageViewer = (props: Props) => {
                 </div>
                 <div className={`${classes.imageContainer}`} >
                     <img src={props.imageSrc} 
-                        className={`${classes.image} ${animationClass}`} 
+                        className={`${classes.image} ${classes.animation} ${animationClass}`} 
                         onLoad={()=>handleIsLoaded()}
                         onError={(e)=>console.log(e)}
                         />

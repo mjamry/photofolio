@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import {makeStyles} from '@material-ui/core/styles'
+import {makeStyles, Theme} from '@material-ui/core/styles'
 import LoaderElement from './LoaderElement';
 import { setTimeout } from 'timers';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {useAnimationState, useAppDispatch, useLoaderSettingsState} from './../state/AppState'
 import { AnimationStep, AnimationStateActions } from '../state/AnimationState';
+import { LoaderSettingsState } from '../state/SettingsState';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles<Theme, LoaderSettingsState>({
     container: {
         display: 'flex',
         flexFlow: 'row',
         height: '100%',
     },
-    loaderContainer:{
+    loaderContainer: props => ({
         width: '100%',
         height: '100%',
-        backgroundColor: 'white',
+        backgroundColor: props.color,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    }),
 })
 
 type Props = {
@@ -27,13 +28,14 @@ type Props = {
 }
 
 const Loader = (props: Props) => {
-    const classes = useStyles()
     const {show} = props;
     const [timer, setTimer] = useState<any | null>(null);
 
     const animationState = useAnimationState()
     const loaderSettings = useLoaderSettingsState()
     const appDispatch = useAppDispatch()
+
+    const classes = useStyles(loaderSettings)
 
     const renderElements = (numberOfElements: number, action: AnimationStep):JSX.Element[] => {
         var output = [];

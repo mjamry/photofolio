@@ -55,7 +55,7 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
 //SELECTORS
-export {useAnimationState, useSettingsState, useLoaderSettingsState}
+export {useAnimationState, useSettingsState, useLoaderSettingsState, useImageViewerSettings}
 
 var useAppState = () => {
     const context = useContext(AppStateContext)
@@ -76,6 +76,10 @@ var useSettingsState = () => {
 
 var useLoaderSettingsState = () => {
     return useAppState().settings.loader
+}
+
+var useImageViewerSettings = () => {
+    return useAppState().settings.imageViewer
 }
 
 var useAppDispatch = () => {
