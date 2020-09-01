@@ -9,7 +9,7 @@ export type SettingsState = {
         delay: number, 
         duration: number,
         timingFunction: string,
-        animationDuration: number,
+        animationTimeout: number,
     }
 }
 
@@ -17,20 +17,23 @@ export enum SettingsStateActions {
 
 }
 
-export const InitialSettingsState = {
+//const values
+const numberOfElements = 5
+const durationInMs = 500
+const delayInMs = 100
+
+
+export const InitialSettingsState: SettingsState = {
     animation: {
         duration: 500,
         delay: 100,
     },
     loader: {
-        numberOfElements: 5, 
+        numberOfElements: numberOfElements, 
         color: 'white',
-        delay: 100, 
-        duration: 500,
+        delay: delayInMs, 
+        duration: durationInMs,
         timingFunction: 'cubic-bezier(.90, 0, .30, 1)',
-        animationDuration: 800
+        animationTimeout: ((0 + (numberOfElements - 1) * delayInMs / 2) * (numberOfElements - 1))
     },
 }
-
-//props.numberOfElements*settings.duration 
-// + ((0+(props.numberOfElements-1)*loaderSettings.delay)/2)*(props.numberOfElements-1)

@@ -41,11 +41,11 @@ const Loader = (props: Props) => {
             output.push(<LoaderElement 
                 action={action} 
                 key={i}
-                id={i}
                 width={`${100/numberOfElements}%`}
                 color={loaderSettings.color}
                 delay={`${i*loaderSettings.delay/1000}s`}
                 duration={`${loaderSettings.duration/1000}s`}
+                timingFunction={loaderSettings.timingFunction}
                 />)
         }
         return output;
@@ -61,14 +61,14 @@ const Loader = (props: Props) => {
             setAction(AnimationStep.fadeIn)
             const timer = setTimeout(
                 ()=>setAction(AnimationStep.loading), 
-                loaderSettings.animationDuration
+                loaderSettings.animationTimeout
             );
             setTimer(timer);
         }else{
             setAction(AnimationStep.fadeOut)
             const timer = setTimeout(
                 ()=>setAction(AnimationStep.none),
-                loaderSettings.animationDuration
+                loaderSettings.animationTimeout
             );
             setTimer(timer);
         }

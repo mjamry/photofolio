@@ -5,7 +5,6 @@ import { AnimationStep } from '../state/AnimationState';
 
 type Props = UIProps & {
     action: AnimationStep,
-    id: number,
 }
 
 type UIProps = {
@@ -13,6 +12,7 @@ type UIProps = {
     duration: string,
     color: string,
     width: string,
+    timingFunction: string,
 }
 
 const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
@@ -26,7 +26,7 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
     animation: props => ({
         animationFillMode: 'both',
         animationDuration: props.duration,
-        animationTimingFunction: 'cubic-bezier(.90, 0, .30, 1)',
+        animationTimingFunction: props.timingFunction,
         animationDelay: props.delay,
     }),
     fadeInAnimation: {
@@ -56,9 +56,6 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
 const LoaderElement = (props: Props) => {
     const classes = useStyles(props)
     const animationClass = props.action === AnimationStep.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation
-
-   // console.log(new Date().toISOString()+` | ${props.id} ${props.delay} ${props.duration} ${props.action} `)
-
 
     return (
         <div className={classes.container}>
