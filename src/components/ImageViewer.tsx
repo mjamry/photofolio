@@ -9,35 +9,10 @@ type Props = {
     imageSrc: string
 }
 
-//image loading progress
-interface Image {
-    load(url: string): void;
-  }
-  
-  Image.prototype.load = function(url : string){
-    var thisImg = this;
-    var xmlHTTP = new XMLHttpRequest();
-    xmlHTTP.open('GET', url, true);
-    xmlHTTP.responseType = 'arraybuffer';
-    xmlHTTP.onload = function(e) {
-        var blob = new Blob([this.response]);
-        thisImg.src = window.URL.createObjectURL(blob);
-    };
-    xmlHTTP.onprogress = function(e: any) {
-        thisImg.completedPercentage = parseInt(`${(e.loaded / e.total) * 100}`);
-    };
-    xmlHTTP.onloadstart = function() {
-        thisImg.completedPercentage = 0;
-    };
-    xmlHTTP.send();
-  };
-  
-  Image.prototype.completedPercentage = 0;
-  
-  const SETTINGS = {
-      height: '80vh',
-      width: 'calc(80vh*1.5)',
-  }
+const SETTINGS = {
+    height: '80vh',
+    width: 'calc(80vh*1.5)',
+}
 
 const useStyles = makeStyles({
     image: {
