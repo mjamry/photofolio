@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {makeStyles} from '@material-ui/core/styles'
 import Loader from './Loader'
-import { useAppState } from '../state/AppState'
-import { AnimationStep } from '../state/StateTypes'
+import { useAnimationState } from '../state/AppState'
+import { AnimationStep } from '../state/AnimationState'
 
 type Props = {
     imageSrc: string
@@ -101,7 +101,7 @@ const ImageViewer = (props: Props) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [animationClass, setAnimationClass] = useState("")
 
-    const appState = useAppState()
+    const animationState = useAnimationState()
 
     useEffect(()=>{
         setIsLoading(true);
@@ -109,7 +109,7 @@ const ImageViewer = (props: Props) => {
 
     useEffect(()=>{
         let animation = ""
-        switch(appState.animation.currentStep){
+        switch(animationState.currentStep){
             case AnimationStep.fadeIn:
                 animation = classes.animationZoomOut
                 break;
@@ -119,7 +119,7 @@ const ImageViewer = (props: Props) => {
         }
         setAnimationClass(animation)
         console.log("Image: "+animation)
-    }, [appState.animation.currentStep])
+    }, [animationState.currentStep])
 
     const handleIsLoaded = ():void => {
         setIsLoading(false);

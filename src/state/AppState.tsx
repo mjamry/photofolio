@@ -1,5 +1,7 @@
 import React, {createContext, useContext, useReducer} from 'react'
-import {AppState, AppStateReducerAction, AnimationStep, AppDispatch, AnimationState, AnimationStateActions, SettingsState} from './StateTypes'
+import {AppState, AppStateReducerAction, AppDispatch } from './StateTypes'
+import { AnimationStep, AnimationState, AnimationStateActions } from './AnimationState'
+import { SettingsState } from './SettingsState'
 
 type Props = {
     children: React.ReactNode,
@@ -16,6 +18,8 @@ const initialState: AppState = {
         currentStep: AnimationStep.none
     }
 }
+
+//REDUCERS
 
 const _animationReducer = (state: AnimationState, action: AppStateReducerAction) => {
     switch(action.type) {
@@ -39,6 +43,8 @@ const _reducer = (state: AppState, action: AppStateReducerAction) => {
     }
 }
 
+//PROVIDER
+
 const AppStateProvider = ({children}: Props) => {
     const [state, dispatch] = useReducer(_reducer, initialState)
     return (
@@ -53,6 +59,8 @@ const AppStateProvider = ({children}: Props) => {
 const AppStateContext = createContext<AppState | undefined>(undefined);
 const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
+//SELECTORS
+
 var useAppState = () => {
     const context = useContext(AppStateContext)
     if(context === undefined){
@@ -61,6 +69,15 @@ var useAppState = () => {
 
     return context
 }
+
+var useAnimationState = () => {
+    return useAppState().animation
+}
+
+var useSettingsState = () => {
+    return useAppState().settings
+}
+
 var useAppDispatch = () => {
     const context = useContext(AppDispatchContext)
     if(context === undefined){
@@ -72,4 +89,4 @@ var useAppDispatch = () => {
 
 
 export default AppStateProvider;
-export {AppStateProvider, useAppState, useAppDispatch}
+export {AppStateProvider, useAnimationState, useSettingsState, useAppDispatch}

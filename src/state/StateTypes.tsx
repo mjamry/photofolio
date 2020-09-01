@@ -1,31 +1,5 @@
-//SETTINGS STATE
-export type SettingsState = {
-    animation: {
-        delay: number, 
-        duration: number,
-    }
-}
-
-export enum SettingsStateActions {
-
-}
-
-
-//ANIMATION STATE
-export type AnimationState = {
-    currentStep: AnimationStep,
-}
-
-export enum AnimationStateActions {
-    setStep,
-}
-
-export enum AnimationStep {
-    fadeIn,
-    fadeOut,
-    loading,
-    none
-}
+import { SettingsState, SettingsStateActions } from "./SettingsState"
+import { AnimationState, AnimationStateActions } from "./AnimationState"
 
 //APP STATE
 export type AppState = {
