@@ -99,8 +99,9 @@ const useStyles = makeStyles({
 
 const ImageViewer = (props: Props) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {state, dispatch} = useAppState()
     const [animationClass, setAnimationClass] = useState("")
+
+    const appState = useAppState()
 
     useEffect(()=>{
         setIsLoading(true);
@@ -108,7 +109,7 @@ const ImageViewer = (props: Props) => {
 
     useEffect(()=>{
         let animation = ""
-        switch(state.animation.currentStep){
+        switch(appState.animation.currentStep){
             case AnimationStep.fadeIn:
                 animation = classes.animationZoomOut
                 break;
@@ -118,7 +119,7 @@ const ImageViewer = (props: Props) => {
         }
         setAnimationClass(animation)
         console.log("Image: "+animation)
-    }, [state.animation.currentStep])
+    }, [appState.animation.currentStep])
 
     const handleIsLoaded = ():void => {
         setIsLoading(false);

@@ -1,8 +1,8 @@
 import React, {createContext, useContext, useReducer} from 'react'
-import {AppState, ReducerAction, Actions, AnimationStep} from './StateTypes'
+import {AppState, AppStateReducerAction, AnimationStep, AppDispatch, AnimationState, AnimationStateActions, SettingsState} from './StateTypes'
 
 type Props = {
-    children: JSX.Element,
+    children: React.ReactNode,
 }
 
 const initialState: AppState = {
@@ -17,34 +17,59 @@ const initialState: AppState = {
     }
 }
 
-const AppContext = createContext<{
-    state: AppState,
-    dispatch: React.Dispatch<any>
-}>({
-    state: initialState,
-    dispatch: () => null
-});
+const _animationReducer = (state: AnimationState, action: AppStateReducerAction) => {
+    switch(action.type) {
+        case AnimationStateActions.setStep: 
+            state = {...state, currentStep: action.payload}
+            break
+    }
 
-const AppStateProvider = (props: Props) => {
+    return state
+}
+
+const _settingsReducer = (state: SettingsState, action: AppStateReducerAction) => {
+    return state
+}
+
+
+const _reducer = (state: AppState, action: AppStateReducerAction) => {
+    return {
+        animation: _animationReducer(state.animation, action),
+        settings: _settingsReducer(state.settings, action)
+    }
+}
+
+const AppStateProvider = ({children}: Props) => {
     const [state, dispatch] = useReducer(_reducer, initialState)
     return (
-        <AppContext.Provider value={{state, dispatch}}>
-            {props.children}
-        </AppContext.Provider>
+        <AppDispatchContext.Provider value={dispatch}>
+            <AppStateContext.Provider value={state}>
+                {children}
+            </AppStateContext.Provider>
+        </AppDispatchContext.Provider>
     )
 }
 
-var useAppState = () => useContext(AppContext);
+const AppStateContext = createContext<AppState | undefined>(undefined);
+const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
-const _reducer = (state: AppState, action: ReducerAction) => {
-    switch(action.type){
-        case Actions.setAnimationStep:
-            state = {...state, animation: {...state.animation, currentStep: action.payload}}
-            break;
+var useAppState = () => {
+    const context = useContext(AppStateContext)
+    if(context === undefined){
+        throw new Error("AppStateContext must be used with provider")
     }
 
-    return state;
+    return context
+}
+var useAppDispatch = () => {
+    const context = useContext(AppDispatchContext)
+    if(context === undefined){
+        throw new Error("AppDispatchContext must be used with provider")
+    }
+
+    return context
 }
 
+
 export default AppStateProvider;
-export {AppContext, AppStateProvider, useAppState}
+export {AppStateProvider, useAppState, useAppDispatch}

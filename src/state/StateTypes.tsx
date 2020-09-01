@@ -1,3 +1,4 @@
+//SETTINGS STATE
 export type SettingsState = {
     animation: {
         delay: number, 
@@ -5,13 +6,18 @@ export type SettingsState = {
     }
 }
 
+export enum SettingsStateActions {
+
+}
+
+
+//ANIMATION STATE
 export type AnimationState = {
     currentStep: AnimationStep,
 }
 
-export type AppState = {
-    settings: SettingsState,
-    animation: AnimationState,
+export enum AnimationStateActions {
+    setStep,
 }
 
 export enum AnimationStep {
@@ -21,10 +27,15 @@ export enum AnimationStep {
     none
 }
 
-export enum Actions { 
-    setAnimationStep,
+//APP STATE
+export type AppState = {
+    settings: SettingsState,
+    animation: AnimationState,
 }
-export type ReducerAction = {
-    type: Actions, 
+
+export type AppDispatch = (action: AppStateReducerAction) => void
+
+export type AppStateReducerAction = {
+    type: SettingsStateActions | AnimationStateActions, 
     payload: any
 }

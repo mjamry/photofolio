@@ -3,8 +3,8 @@ import {makeStyles} from '@material-ui/core/styles'
 import LoaderElement from './LoaderElement';
 import { setTimeout } from 'timers';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {useAppState} from './../state/AppState'
-import {Actions, AnimationStep} from './../state/StateTypes'
+import {useAppState, useAppDispatch} from './../state/AppState'
+import {AnimationStep, AnimationStateActions} from './../state/StateTypes'
 
 const useStyles = makeStyles({
     container: {
@@ -43,7 +43,8 @@ const Loader = (props: Props) => {
     const {show} = props;
     const [timer, setTimer] = useState<any | null>(null);
 
-    const {state, dispatch} = useAppState()
+    const appState = useAppState()
+    const appDispatch = useAppDispatch()
 
     const animationDuration = 
         //props.numberOfElements*settings.duration 
@@ -67,7 +68,7 @@ const Loader = (props: Props) => {
     }
 
     const setAction = (action: AnimationStep) => {
-        dispatch({type: Actions.setAnimationStep, payload: action})
+        appDispatch({type: AnimationStateActions.setStep, payload: action})
     }
 
     useEffect(()=> {
@@ -91,14 +92,14 @@ const Loader = (props: Props) => {
     }, [show])
 
     useEffect(()=>{
-        console.log(AnimationStep[state.animation.currentStep])
-    }, [state.animation.currentStep])
+        console.log(AnimationStep[appState.animation.currentStep])
+    }, [appState.animation.currentStep])
 
     const renderContent = () => {
-        switch(state.animation.currentStep){
+        switch(appState.animation.currentStep){
             case AnimationStep.fadeIn:
             case AnimationStep.fadeOut:
-                return renderElements(props.numberOfElements, state.animation.currentStep)
+                return renderElements(props.numberOfElements, appState.animation.currentStep)
             case AnimationStep.loading:
                 return <div className={classes.loaderContainer}><CircularProgress /></div>
             case AnimationStep.none:
