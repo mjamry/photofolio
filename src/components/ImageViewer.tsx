@@ -130,7 +130,7 @@ const ImageViewer = (props: Props) => {
         <div className={classes.container}>
             <div className={classes.contentContainer}>
                 <div className={classes.loaderContainer}>
-                    <Loader numberOfElements={5} color="white" show={isLoading}/> 
+                    <Loader show={isLoading}/> 
                 </div>
                 <div className={`${classes.imageContainer}`} >
                     <img src={props.imageSrc} 

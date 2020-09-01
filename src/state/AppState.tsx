@@ -1,19 +1,14 @@
 import React, {createContext, useContext, useReducer} from 'react'
 import {AppState, AppStateReducerAction, AppDispatch } from './StateTypes'
 import { AnimationStep, AnimationState, AnimationStateActions } from './AnimationState'
-import { SettingsState } from './SettingsState'
+import { SettingsState, InitialSettingsState } from './SettingsState'
 
 type Props = {
     children: React.ReactNode,
 }
 
 const initialState: AppState = {
-    settings: {
-        animation: {
-            duration: 500,
-            delay: 100,
-        }
-    },
+    settings: InitialSettingsState,
     animation: {
         currentStep: AnimationStep.none
     }
@@ -60,6 +55,7 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
 //SELECTORS
+export {useAnimationState, useSettingsState, useLoaderSettingsState}
 
 var useAppState = () => {
     const context = useContext(AppStateContext)
@@ -78,6 +74,10 @@ var useSettingsState = () => {
     return useAppState().settings
 }
 
+var useLoaderSettingsState = () => {
+    return useAppState().settings.loader
+}
+
 var useAppDispatch = () => {
     const context = useContext(AppDispatchContext)
     if(context === undefined){
@@ -87,6 +87,4 @@ var useAppDispatch = () => {
     return context
 }
 
-
-export default AppStateProvider;
-export {AppStateProvider, useAnimationState, useSettingsState, useAppDispatch}
+export {AppStateProvider, useAppDispatch}

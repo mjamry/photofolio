@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles'
 import LoaderElement from './LoaderElement';
 import { setTimeout } from 'timers';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {useAnimationState, useAppDispatch} from './../state/AppState'
+import {useAnimationState, useAppDispatch, useLoaderSettingsState} from './../state/AppState'
 import { AnimationStep, AnimationStateActions } from '../state/AnimationState';
 
 const useStyles = makeStyles({
@@ -23,19 +23,7 @@ const useStyles = makeStyles({
 })
 
 type Props = {
-    numberOfElements: number,
     show: boolean,
-    color: string
-}
-
-type Settings = {
-    delay: number,
-    duration: number,
-}
-
-const settings: Settings = {
-    delay: 100,
-    duration: 500,
 }
 
 const Loader = (props: Props) => {
@@ -44,12 +32,8 @@ const Loader = (props: Props) => {
     const [timer, setTimer] = useState<any | null>(null);
 
     const animationState = useAnimationState()
+    const loaderSettings = useLoaderSettingsState()
     const appDispatch = useAppDispatch()
-
-    const animationDuration = 
-        //props.numberOfElements*settings.duration 
-        + ((0+(props.numberOfElements-1)*settings.delay)/2)*(props.numberOfElements-1)
-
 
     const renderElements = (numberOfElements: number, action: AnimationStep):JSX.Element[] => {
         var output = [];
@@ -59,9 +43,9 @@ const Loader = (props: Props) => {
                 key={i}
                 id={i}
                 width={`${100/numberOfElements}%`}
-                color={props.color}
-                delay={`${i*settings.delay/1000}s`}
-                duration={`${settings.duration/1000}s`}
+                color={loaderSettings.color}
+                delay={`${i*loaderSettings.delay/1000}s`}
+                duration={`${loaderSettings.duration/1000}s`}
                 />)
         }
         return output;
@@ -77,14 +61,14 @@ const Loader = (props: Props) => {
             setAction(AnimationStep.fadeIn)
             const timer = setTimeout(
                 ()=>setAction(AnimationStep.loading), 
-                animationDuration
+                loaderSettings.animationDuration
             );
             setTimer(timer);
         }else{
             setAction(AnimationStep.fadeOut)
             const timer = setTimeout(
                 ()=>setAction(AnimationStep.none),
-                animationDuration
+                loaderSettings.animationDuration
             );
             setTimer(timer);
         }
@@ -99,7 +83,7 @@ const Loader = (props: Props) => {
         switch(animationState.currentStep){
             case AnimationStep.fadeIn:
             case AnimationStep.fadeOut:
-                return renderElements(props.numberOfElements, animationState.currentStep)
+                return renderElements(loaderSettings.numberOfElements, animationState.currentStep)
             case AnimationStep.loading:
                 return <div className={classes.loaderContainer}><CircularProgress /></div>
             case AnimationStep.none:
