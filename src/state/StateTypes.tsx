@@ -4,7 +4,7 @@ import { ImageLoadingState, ImageLoadingStateActions } from "./ImageLoadingState
 //APP STATE
 export type AppState = {
     settings: SettingsState,
-    animation: ImageLoadingState,
+    imageLoading: ImageLoadingState,
 }
 
 export type AppDispatch = (action: AppStateReducerAction) => void

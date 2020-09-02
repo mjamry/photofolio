@@ -9,7 +9,7 @@ type Props = {
 
 const initialState: AppState = {
     settings: InitialSettingsState,
-    animation: {
+    imageLoading: {
         currentStep: ImageLoadingStep.none
     }
 }
@@ -33,7 +33,7 @@ const _settingsReducer = (state: SettingsState, action: AppStateReducerAction) =
 
 const _reducer = (state: AppState, action: AppStateReducerAction) => {
     return {
-        animation: _animationReducer(state.animation, action),
+        imageLoading: _animationReducer(state.imageLoading, action),
         settings: _settingsReducer(state.settings, action)
     }
 }
@@ -67,7 +67,7 @@ var useAppState = () => {
 }
 
 var useImageLoadingState = () => {
-    return useAppState().animation
+    return useAppState().imageLoading
 }
 
 var useSettingsState = () => {
