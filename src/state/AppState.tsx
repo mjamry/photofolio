@@ -2,6 +2,7 @@ import React, {createContext, useContext, useReducer} from 'react'
 import {AppState, AppStateReducerAction, AppDispatch } from './StateTypes'
 import { ImageLoadingStep, ImageLoadingState, ImageLoadingStateActions } from './ImageLoadingState'
 import { SettingsState, InitialSettingsState } from './SettingsState'
+import { ImageDataState, ImageDataStateActions } from './ImageDataState'
 
 type Props = {
     children: React.ReactNode,
@@ -11,6 +12,10 @@ const initialState: AppState = {
     settings: InitialSettingsState,
     imageLoading: {
         currentStep: ImageLoadingStep.none
+    },
+    imageData: {
+        currentImageIndex: 0,
+        imagesData: []
     }
 }
 
@@ -30,11 +35,25 @@ const _settingsReducer = (state: SettingsState, action: AppStateReducerAction) =
     return state
 }
 
+const _imageDataReducer = (state: ImageDataState, action: AppStateReducerAction) => {
+    switch(action.type) {
+        case ImageDataStateActions.setCurrentIndex:
+            state = {...state, currentImageIndex: action.payload}
+            break;
+        case ImageDataStateActions.setImageData: 
+            state = {...state, imagesData: action.payload}
+            break;
+    }
+    
+    return state
+}
+
 
 const _reducer = (state: AppState, action: AppStateReducerAction) => {
     return {
         imageLoading: _animationReducer(state.imageLoading, action),
-        settings: _settingsReducer(state.settings, action)
+        settings: _settingsReducer(state.settings, action),
+        imageData: _imageDataReducer(state.imageData, action)
     }
 }
 
@@ -55,9 +74,9 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
 //SELECTORS
-export {useImageLoadingState, useSettingsState, useLoaderSettingsState, useImageViewerSettings}
+export {useImageLoadingState, useSettingsState, useLoaderSettingsState, useImageViewerSettings, useImageDataState}
 
-var useAppState = () => {
+const useAppState = () => {
     const context = useContext(AppStateContext)
     if(context === undefined){
         throw new Error("AppStateContext must be used with provider")
@@ -66,23 +85,27 @@ var useAppState = () => {
     return context
 }
 
-var useImageLoadingState = () => {
+const useImageDataState = () => {
+    return useAppState().imageData
+}
+
+const useImageLoadingState = () => {
     return useAppState().imageLoading
 }
 
-var useSettingsState = () => {
+const useSettingsState = () => {
     return useAppState().settings
 }
 
-var useLoaderSettingsState = () => {
+const useLoaderSettingsState = () => {
     return useAppState().settings.loader
 }
 
-var useImageViewerSettings = () => {
+const useImageViewerSettings = () => {
     return useAppState().settings.imageViewer
 }
 
-var useAppDispatch = () => {
+const useAppDispatch = () => {
     const context = useContext(AppDispatchContext)
     if(context === undefined){
         throw new Error("AppDispatchContext must be used with provider")
