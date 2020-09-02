@@ -5,14 +5,9 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import IconButton from "@material-ui/core/IconButton"
 import ImageViewer from "./components/ImageViewer"
 import './App.css';
-import { useImageViewerSettings } from './state/AppState';
-
-declare global {
-  interface Window { gapi: any; }
-}
-
-window.gapi = window.gapi || {};
-
+import { useImageViewerSettings, useImageDataState, useAppDispatch } from './state/AppState';
+import { useImageDataService } from './services/ImageDataService';
+import { ImageDataStateActions } from './state/ImageDataState';
 
 const useStyles = makeStyles({
   horizontalMenu: {
@@ -44,45 +39,34 @@ const useStyles = makeStyles({
 })
 
 const App = () => {
-  const [imagesList, setImagesList] = useState<any[]>([])
   const classes = useStyles();
   const [image, setImage] = useState<string>("");
-  const [curretnImageIndex, setImageIndex] = useState<number>(0);
 
   const imaveViewerSettings = useImageViewerSettings()
+  const imageDataService = useImageDataService()
+  const imageDataState = useImageDataState()
+  const appStateDispatch = useAppDispatch()
   
   const handleDownButtonClick = () => {
-    setImageIndex(curretnImageIndex+1);
-    setImage(imagesList[curretnImageIndex].webContentLink);
+    const newIndex = imageDataState.currentImageIndex++
+    appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+    setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
   }
 
   useEffect(() => {
+    const initialize = async () => {
+      await imageDataService.initialize()
+      await imageDataService.fetchImagesData('')
+    }
 
-    gapi.load('client', () => {
-      gapi.client
-        .init({
-          'apiKey': 'AIzaSyDwJ7EKjHmTfy44hQMbvR5HEdMgkUjn2fw',
-          'discoveryDocs': ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
-          'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
-          'clientId': '663092351374-h370k8odhj2gtcd5rrp1qo8mkcs9gkvr.apps.googleusercontent.com'
-        })
-        .then(() => {
-          return gapi.client.drive.files.list({
-            "q": "'0B6Fw2L7BBXZTQUQtOUZrLWF2TWc' in parents",
-            "fields": 'files(*)'
-          });
-        })
-        .then((response: any) => {
-          console.log(response)
-          setImagesList(response.result.files)
-          setImage(response.result.files[0].webContentLink);
-        })
-        .catch((error: any) => {
-          console.log(error)
-        })
-    });
-
+    initialize();
   }, [])
+
+  useEffect(()=>{
+    console.log(imageDataState)
+    if(imageDataState.imagesData.length > 0)
+    setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
+  }, [imageDataState.imagesData])
 
   return (
     <div>
@@ -94,7 +78,6 @@ const App = () => {
       <div className={classes.verticatMenu}>
         <Button>Landscapes</Button>
         <Button>People</Button>
-
       </div>
 
       <ImageViewer 
