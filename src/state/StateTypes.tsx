@@ -12,6 +12,6 @@ export type AppState = {
 export type AppDispatch = (action: AppStateReducerAction) => void
 
 export type AppStateReducerAction = {
-    type: SettingsStateActions | ImageLoadingStateActions | ImageDataStateActions, 
+    type: string, 
     payload: any
 }

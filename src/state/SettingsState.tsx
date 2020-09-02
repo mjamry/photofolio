@@ -19,7 +19,7 @@ export type LoaderSettingsState =
     animationTimeout: number,
 }
 
-export enum SettingsStateActions {
+export const SettingsStateActions = {
 
 }
 

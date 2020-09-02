@@ -22,7 +22,7 @@ export type ImageDataState = {
     currentImageIndex: number
 }
 
-export enum ImageDataStateActions {
-    setImageData,
-    setCurrentIndex
+export const ImageDataStateActions = {
+    setImageData: 'setImageData',
+    setCurrentIndex: 'setCurrentIndex',
 }
