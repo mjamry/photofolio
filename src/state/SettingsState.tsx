@@ -1,9 +1,5 @@
 export type SettingsState = 
 {
-    animation: {
-        delay: number, 
-        duration: number,
-    },
     loader: LoaderSettingsState,
     imageViewer: {
         duration: number,
@@ -27,34 +23,33 @@ export enum SettingsStateActions {
 
 }
 
-//const values
-    //loader
-    const numberOfElements = 5
-    const durationInMs = 500
-    const delayInMs = 100
-    //img imageViewer
-    const height = 80
-    const ratio = 1.5
-
+const Constants = {
+    loader: {
+        numberOfElements: 5,
+        durationInMs: 500,
+        delayInMs: 100,
+    },
+    imageViewer: {
+        height: 80,
+        ratio: 1.5
+    }
+}
+ 
 export const InitialSettingsState: SettingsState = 
 {
-    animation: {
-        duration: 500,
-        delay: 100,
-    },
     loader: {
-        numberOfElements: numberOfElements, 
+        numberOfElements: Constants.loader.numberOfElements, 
         color: 'white',
-        delay: delayInMs, 
-        duration: durationInMs,
+        delay: Constants.loader.delayInMs, 
+        duration: Constants.loader.durationInMs,
         timingFunction: 'cubic-bezier(.90, 0, .30, 1)',
-        animationTimeout: ((0 + (numberOfElements - 1) * delayInMs / 2) * (numberOfElements - 1))
+        animationTimeout: ((0 + (Constants.loader.numberOfElements - 1) * Constants.loader.delayInMs / 2) * (Constants.loader.numberOfElements - 1))
     },
 
     imageViewer: {
         duration: 700,
         timingFunction: 'cubic-bezier(.90, 0, .30, 1)',
-        height: `${height}vh`,
-        width: `calc(${height}vh * ${ratio})`
+        height: `${Constants.imageViewer.height}vh`,
+        width: `calc(${Constants.imageViewer.height}vh * ${Constants.imageViewer.ratio})`
     }
 }
