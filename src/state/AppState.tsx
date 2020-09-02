@@ -80,7 +80,8 @@ export {
     useLoaderSettingsState, 
     useImageViewerSettings, 
     useImageDataState, 
-    useGapiClientSettingsState
+    useGapiClientSettingsState,
+    useImagesPathsSettingsState,
 }
 
 const useAppState = () => {
@@ -110,6 +111,10 @@ const useLoaderSettingsState = () => {
 
 const useGapiClientSettingsState = () => {
     return useAppState().settings.gapiClient
+}
+
+const useImagesPathsSettingsState = () => {
+    return useAppState().settings.imagesPaths
 }
 
 const useImageViewerSettings = () => {

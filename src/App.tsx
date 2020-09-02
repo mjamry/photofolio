@@ -5,7 +5,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 import IconButton from "@material-ui/core/IconButton"
 import ImageViewer from "./components/ImageViewer"
 import './App.css';
-import { useImageViewerSettings, useImageDataState, useAppDispatch } from './state/AppState';
+import { useImageViewerSettings, useImageDataState, useAppDispatch, useImagesPathsSettingsState } from './state/AppState';
 import { useImageDataService } from './services/ImageDataService';
 import { ImageDataStateActions } from './state/ImageDataState';
 
@@ -21,10 +21,9 @@ const useStyles = makeStyles({
   },
   verticatMenu: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    height: '100vh',
-    top: 0,
+    flexDirection: 'row',
+    top: '20px',
+    justifyContent: 'flex-start',
     left: '20px',
     position: 'fixed',
   }, 
@@ -40,12 +39,16 @@ const useStyles = makeStyles({
 
 const App = () => {
   const classes = useStyles();
-  const [image, setImage] = useState<string>("");
 
   const imaveViewerSettings = useImageViewerSettings()
   const imageDataService = useImageDataService()
   const imageDataState = useImageDataState()
   const appStateDispatch = useAppDispatch()
+  const imagesPaths = useImagesPathsSettingsState()
+
+  const [image, setImage] = useState<string>('');
+  const [imagesPath, setImagesPath] = useState<string>(imagesPaths.landscapes.default)
+
   
   const handleDownButtonClick = () => {
     const newIndex = imageDataState.currentImageIndex + 1
@@ -61,7 +64,7 @@ const App = () => {
   useEffect(() => {
     const initialize = async () => {
       await imageDataService.initialize()
-      await imageDataService.fetchImagesData('')
+      await imageDataService.fetchImagesData(imagesPath)
     }
 
     initialize();
@@ -80,6 +83,12 @@ const App = () => {
   }, 
   [imageDataState.currentImageIndex])
 
+  useEffect(() => {
+    imageDataService.fetchImagesData(imagesPath)
+   console.log(imagesPath)
+  },
+  [imagesPath])
+
   return (
     <div>
       <div className={classes.horizontalMenu}>
@@ -88,8 +97,8 @@ const App = () => {
 
       </div>
       <div className={classes.verticatMenu}>
-        <Button>Landscapes</Button>
-        <Button>People</Button>
+        <Button onClick={()=>setImagesPath(imagesPaths.landscapes.default)}>Landscapes</Button>
+        <Button onClick={()=>setImagesPath(imagesPaths.people.default)}>People</Button>
       </div>
 
       <ImageViewer 

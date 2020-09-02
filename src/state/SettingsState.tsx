@@ -13,7 +13,16 @@ export type SettingsState =
         discoveryDocs: [string],
         scope: string,
         fields: string,
+    },
+    imagesPaths: {
+        landscapes: {
+            default: string,
+        },
+        people: {
+            default: string,
+        }
     }
+
 }
 
 export type LoaderSettingsState = 
@@ -66,5 +75,14 @@ export const InitialSettingsState: SettingsState =
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
         scope: 'https://www.googleapis.com/auth/drive.metadata.readonly',
         fields: 'files(*)'
+    },
+
+    imagesPaths: {
+        landscapes: {
+            default: '11aXiiC9918ShCainZ4JQzTJLjlfHJPtJ'
+        },
+        people: {
+            default: '0B6Fw2L7BBXZTQUQtOUZrLWF2TWc'
+        }
     }
 }

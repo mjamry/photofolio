@@ -37,6 +37,11 @@ export const useImageDataService = (): ImageDataService => {
     }
 
     const fetchImagesData = async (locationId: string) => {
+        if(!gapi.client){
+            console.log('GAPI client not yet initialized')
+            return
+        }
+
         const response = await gapi.client.drive.files.list({
             "q": `'${locationId}' in parents`,
             "fields": settings.fields
