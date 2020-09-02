@@ -16,11 +16,6 @@ type UIProps = {
     duration: string
 }
 
-const SETTINGS = {
-    height: '80vh',
-    width: 'calc(80vh*1.5)',
-}
-
 const useStyles = makeStyles<Theme, Props>({
     image: {
         height: '100%',
@@ -101,7 +96,6 @@ const ImageViewer = (props: Props) => {
                 break;
         }
         setAnimationClass(animation)
-        console.log("Image: "+animation)
     }, [animationState.currentStep])
 
     const handleIsLoaded = ():void => {
