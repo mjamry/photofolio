@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Loader from './Loader'
 import { useImageLoadingState } from '../state/AppState'
 import { ImageLoadingStep } from '../state/ImageLoadingState'
 import {Theme} from '@material-ui/core'
+
+import { useImageLoadingService } from '../services/ImageLoadingService'
 
 type Props = UIProps & {
     imageSrc: string
@@ -75,19 +77,26 @@ const useStyles = makeStyles<Theme, Props>({
 })
 
 const ImageViewer = (props: Props) => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [animationClass, setAnimationClass] = useState("")
     const classes = useStyles(props);
+    const imageRef = useRef<HTMLImageElement>(null)
+    const [animationClass, setAnimationClass] = useState("")
 
-    const animationState = useImageLoadingState()
+    const imageLoading = useImageLoadingState()
+    const imageLoadingService = useImageLoadingService()
+ 
+    useEffect(() =>{
+        const load = async () => 
+        {
+            const result = await imageLoadingService.loadImage(props.imageSrc)
+            imageRef.current!.src = result
+        }
 
-    useEffect(()=>{
-        setIsLoading(true);
+        load()
     }, [props.imageSrc])
 
     useEffect(()=>{
         let animation = ""
-        switch(animationState.currentStep){
+        switch(imageLoading.currentStep){
             case ImageLoadingStep.preLoading:
                 animation = classes.animationZoomOut
                 break;
@@ -96,24 +105,20 @@ const ImageViewer = (props: Props) => {
                 break;
         }
         setAnimationClass(animation)
-    }, [animationState.currentStep])
 
-    const handleIsLoaded = ():void => {
-        setIsLoading(false);
-    }
+    }, [imageLoading.currentStep])
 
     return (
         <div className={classes.container}>
             <div className={classes.contentContainer}>
                 <div className={classes.loaderContainer}>
-                    <Loader show={isLoading}/> 
+                    <Loader/> 
                 </div>
                 <div className={`${classes.imageContainer}`} >
-                    <img src={props.imageSrc} 
+                    <img 
+                        ref={imageRef}
                         className={`${classes.image} ${classes.animation} ${animationClass}`} 
-                        onLoad={()=>handleIsLoaded()}
-                        onError={(e)=>console.log(e)}
-                        />
+                    />
                 </div>
             </div>
         </div>
