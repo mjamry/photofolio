@@ -1,15 +1,15 @@
 import { SettingsState, SettingsStateActions } from "./SettingsState"
-import { AnimationState, AnimationStateActions } from "./AnimationState"
+import { ImageLoadingState, ImageLoadingStateActions } from "./ImageLoadingState"
 
 //APP STATE
 export type AppState = {
     settings: SettingsState,
-    animation: AnimationState,
+    animation: ImageLoadingState,
 }
 
 export type AppDispatch = (action: AppStateReducerAction) => void
 
 export type AppStateReducerAction = {
-    type: SettingsStateActions | AnimationStateActions, 
+    type: SettingsStateActions | ImageLoadingStateActions, 
     payload: any
 }

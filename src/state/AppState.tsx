@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useReducer} from 'react'
 import {AppState, AppStateReducerAction, AppDispatch } from './StateTypes'
-import { AnimationStep, AnimationState, AnimationStateActions } from './AnimationState'
+import { ImageLoadingStep, ImageLoadingState, ImageLoadingStateActions } from './ImageLoadingState'
 import { SettingsState, InitialSettingsState } from './SettingsState'
 
 type Props = {
@@ -10,15 +10,15 @@ type Props = {
 const initialState: AppState = {
     settings: InitialSettingsState,
     animation: {
-        currentStep: AnimationStep.none
+        currentStep: ImageLoadingStep.none
     }
 }
 
 //REDUCERS
 
-const _animationReducer = (state: AnimationState, action: AppStateReducerAction) => {
+const _animationReducer = (state: ImageLoadingState, action: AppStateReducerAction) => {
     switch(action.type) {
-        case AnimationStateActions.setStep: 
+        case ImageLoadingStateActions.setStep: 
             state = {...state, currentStep: action.payload}
             break
     }
@@ -55,7 +55,7 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
 //SELECTORS
-export {useAnimationState, useSettingsState, useLoaderSettingsState, useImageViewerSettings}
+export {useImageLoadingState, useSettingsState, useLoaderSettingsState, useImageViewerSettings}
 
 var useAppState = () => {
     const context = useContext(AppStateContext)
@@ -66,7 +66,7 @@ var useAppState = () => {
     return context
 }
 
-var useAnimationState = () => {
+var useImageLoadingState = () => {
     return useAppState().animation
 }
 

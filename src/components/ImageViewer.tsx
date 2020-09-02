@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Loader from './Loader'
-import { useAnimationState } from '../state/AppState'
-import { AnimationStep } from '../state/AnimationState'
+import { useImageLoadingState } from '../state/AppState'
+import { ImageLoadingStep } from '../state/ImageLoadingState'
 import {Theme} from '@material-ui/core'
 
 type Props = UIProps & {
@@ -79,7 +79,7 @@ const ImageViewer = (props: Props) => {
     const [animationClass, setAnimationClass] = useState("")
     const classes = useStyles(props);
 
-    const animationState = useAnimationState()
+    const animationState = useImageLoadingState()
 
     useEffect(()=>{
         setIsLoading(true);
@@ -88,10 +88,10 @@ const ImageViewer = (props: Props) => {
     useEffect(()=>{
         let animation = ""
         switch(animationState.currentStep){
-            case AnimationStep.fadeIn:
+            case ImageLoadingStep.preLoading:
                 animation = classes.animationZoomOut
                 break;
-            case AnimationStep.fadeOut:
+            case ImageLoadingStep.postLoading:
                 animation = classes.animationZoomIn
                 break;
         }

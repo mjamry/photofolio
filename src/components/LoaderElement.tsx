@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
 import {Theme} from '@material-ui/core'
-import { AnimationStep } from '../state/AnimationState';
+import { ImageLoadingStep } from '../state/ImageLoadingState';
 
 type Props = UIProps & {
-    action: AnimationStep,
+    action: ImageLoadingStep,
 }
 
 type UIProps = {
@@ -55,7 +55,7 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
 
 const LoaderElement = (props: Props) => {
     const classes = useStyles(props)
-    const animationClass = props.action === AnimationStep.fadeIn ? classes.fadeInAnimation : classes.fadeOutAnimation
+    const animationClass = props.action === ImageLoadingStep.preLoading ? classes.fadeInAnimation : classes.fadeOutAnimation
 
     return (
         <div className={classes.container}>

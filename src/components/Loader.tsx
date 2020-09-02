@@ -3,8 +3,8 @@ import {makeStyles, Theme} from '@material-ui/core/styles'
 import LoaderElement from './LoaderElement';
 import { setTimeout } from 'timers';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {useAnimationState, useAppDispatch, useLoaderSettingsState} from './../state/AppState'
-import { AnimationStep, AnimationStateActions } from '../state/AnimationState';
+import {useImageLoadingState, useAppDispatch, useLoaderSettingsState} from './../state/AppState'
+import { ImageLoadingStep, ImageLoadingStateActions } from '../state/ImageLoadingState';
 import { LoaderSettingsState } from '../state/SettingsState';
 
 const useStyles = makeStyles<Theme, LoaderSettingsState>({
@@ -31,13 +31,13 @@ const Loader = (props: Props) => {
     const {show} = props;
     const [timer, setTimer] = useState<any | null>(null);
 
-    const animationState = useAnimationState()
+    const animationState = useImageLoadingState()
     const loaderSettings = useLoaderSettingsState()
     const appDispatch = useAppDispatch()
 
     const classes = useStyles(loaderSettings)
 
-    const renderElements = (numberOfElements: number, action: AnimationStep):JSX.Element[] => {
+    const renderElements = (numberOfElements: number, action: ImageLoadingStep):JSX.Element[] => {
         var output = [];
         for (let i = 0; i < numberOfElements; i++){
             output.push(<LoaderElement 
@@ -53,23 +53,23 @@ const Loader = (props: Props) => {
         return output;
     }
 
-    const setAction = (action: AnimationStep) => {
-        appDispatch({type: AnimationStateActions.setStep, payload: action})
+    const setAction = (action: ImageLoadingStep) => {
+        appDispatch({type: ImageLoadingStateActions.setStep, payload: action})
     }
 
     useEffect(()=> {
         clearTimeout(timer)
         if(show){
-            setAction(AnimationStep.fadeIn)
+            setAction(ImageLoadingStep.preLoading)
             const timer = setTimeout(
-                ()=>setAction(AnimationStep.loading), 
+                ()=>setAction(ImageLoadingStep.loading), 
                 loaderSettings.animationTimeout
             );
             setTimer(timer);
         }else{
-            setAction(AnimationStep.fadeOut)
+            setAction(ImageLoadingStep.postLoading)
             const timer = setTimeout(
-                ()=>setAction(AnimationStep.none),
+                ()=>setAction(ImageLoadingStep.none),
                 loaderSettings.animationTimeout
             );
             setTimer(timer);
@@ -78,17 +78,17 @@ const Loader = (props: Props) => {
     }, [show])
 
     useEffect(()=>{
-        console.log(AnimationStep[animationState.currentStep])
+        console.log(ImageLoadingStep[animationState.currentStep])
     }, [animationState.currentStep])
 
     const renderContent = () => {
         switch(animationState.currentStep){
-            case AnimationStep.fadeIn:
-            case AnimationStep.fadeOut:
+            case ImageLoadingStep.preLoading:
+            case ImageLoadingStep.postLoading:
                 return renderElements(loaderSettings.numberOfElements, animationState.currentStep)
-            case AnimationStep.loading:
+            case ImageLoadingStep.loading:
                 return <div className={classes.loaderContainer}><CircularProgress /></div>
-            case AnimationStep.none:
+            case ImageLoadingStep.none:
             default:
                 return <></>
         }
