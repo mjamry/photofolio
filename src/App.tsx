@@ -48,9 +48,14 @@ const App = () => {
   const appStateDispatch = useAppDispatch()
   
   const handleDownButtonClick = () => {
-    const newIndex = imageDataState.currentImageIndex++
+    const newIndex = imageDataState.currentImageIndex + 1
     appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
-    setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
+  }
+
+  const setCurrentImage = () => {
+    if(imageDataState.imagesData.length > 0){
+      setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
+    }
   }
 
   useEffect(() => {
@@ -62,11 +67,18 @@ const App = () => {
     initialize();
   }, [])
 
-  useEffect(()=>{
-    console.log(imageDataState)
-    if(imageDataState.imagesData.length > 0)
-    setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
-  }, [imageDataState.imagesData])
+  useEffect(()=>
+  {
+    appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: 0})
+    setCurrentImage()
+  }, 
+  [imageDataState.imagesData])
+
+  useEffect(() => 
+  {
+    setCurrentImage()
+  }, 
+  [imageDataState.currentImageIndex])
 
   return (
     <div>
