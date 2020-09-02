@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {makeStyles} from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+
+import ExpandLessIcon from "@material-ui/icons/ExpandLess"
 import IconButton from "@material-ui/core/IconButton"
 import ImageViewer from "./components/ImageViewer"
 import './App.css';
@@ -55,16 +57,27 @@ const App = () => {
     appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
   }
 
+  const handleUpButtonClick = () => {
+    const newIndex = imageDataState.currentImageIndex - 1
+    appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+  }
+
   const setCurrentImage = () => {
     if(imageDataState.imagesData.length > 0){
       setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
     }
   }
 
+  const fetchImages = async () => {
+    console.log("START LOADING PATH: "+imagesPath)
+    await imageDataService.fetchImagesData(imagesPath)
+    console.log("END LOADING PATH: "+imagesPath)
+  }
+
   useEffect(() => {
     const initialize = async () => {
       await imageDataService.initialize()
-      await imageDataService.fetchImagesData(imagesPath)
+      fetchImages()
     }
 
     initialize();
@@ -84,8 +97,7 @@ const App = () => {
   [imageDataState.currentImageIndex])
 
   useEffect(() => {
-    imageDataService.fetchImagesData(imagesPath)
-   console.log(imagesPath)
+    fetchImages()
   },
   [imagesPath])
 
@@ -112,6 +124,9 @@ const App = () => {
       <div className={classes.downButton}>
         <IconButton onClick={()=>handleDownButtonClick()}>
           <ExpandMoreIcon fontSize="large" />
+        </IconButton>
+        <IconButton onClick={()=>handleUpButtonClick()}>
+          <ExpandLessIcon fontSize="large" />
         </IconButton>
       </div>
     </div>
