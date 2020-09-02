@@ -1,4 +1,4 @@
-import { useAppDispatch } from "../state/AppState";
+import { useAppDispatch, useGapiClientSettingsState } from "../state/AppState";
 import { ImageDataStateActions, ImageDTO } from "../state/ImageDataState";
 
 window.gapi = window.gapi || {};
@@ -13,16 +13,17 @@ export type ImageDataService = {
 
 export const useImageDataService = (): ImageDataService => {
     const dispatchState = useAppDispatch()
+    const settings = useGapiClientSettingsState()
 
     const initialize = async (): Promise<void> => {
         return new Promise<void>((resolve, reject) => {
             gapi.load('client', () => {
                 gapi.client
                     .init({
-                        'apiKey': 'AIzaSyDwJ7EKjHmTfy44hQMbvR5HEdMgkUjn2fw',
-                        'discoveryDocs': ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
-                        'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
-                        'clientId': '663092351374-h370k8odhj2gtcd5rrp1qo8mkcs9gkvr.apps.googleusercontent.com'
+                        'apiKey': settings.apiKey,
+                        'discoveryDocs': settings.discoveryDocs,
+                        'scope': settings.scope,
+                        'clientId': settings.clientId,
                     })
                     .then(() => {
                         resolve()
@@ -37,14 +38,15 @@ export const useImageDataService = (): ImageDataService => {
 
     const fetchImagesData = async (locationId: string) => {
         const response = await gapi.client.drive.files.list({
-            "q": "'0B6Fw2L7BBXZTQUQtOUZrLWF2TWc' in parents",
-            "fields": 'files(*)'
+            "q": `'${locationId}' in parents`,
+            "fields": settings.fields
         });
 
         if(response.status === 200) 
         {
             const imagesData = response.result.files as ImageDTO[]
             dispatchState({type: ImageDataStateActions.setImageData, payload: imagesData});
+            console.log(imagesData);
         }
         else
         {

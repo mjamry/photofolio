@@ -74,7 +74,14 @@ const AppStateContext = createContext<AppState | undefined>(undefined);
 const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
 //SELECTORS
-export {useImageLoadingState, useSettingsState, useLoaderSettingsState, useImageViewerSettings, useImageDataState}
+export {
+    useImageLoadingState, 
+    useSettingsState, 
+    useLoaderSettingsState, 
+    useImageViewerSettings, 
+    useImageDataState, 
+    useGapiClientSettingsState
+}
 
 const useAppState = () => {
     const context = useContext(AppStateContext)
@@ -99,6 +106,10 @@ const useSettingsState = () => {
 
 const useLoaderSettingsState = () => {
     return useAppState().settings.loader
+}
+
+const useGapiClientSettingsState = () => {
+    return useAppState().settings.gapiClient
 }
 
 const useImageViewerSettings = () => {

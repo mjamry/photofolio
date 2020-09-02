@@ -6,6 +6,13 @@ export type SettingsState =
         timingFunction: string,
         height: string,
         width: string
+    },
+    gapiClient: {
+        apiKey: string,
+        clientId: string,
+        discoveryDocs: [string],
+        scope: string,
+        fields: string,
     }
 }
 
@@ -51,5 +58,13 @@ export const InitialSettingsState: SettingsState =
         timingFunction: 'cubic-bezier(.90, 0, .30, 1)',
         height: `${Constants.imageViewer.height}vh`,
         width: `calc(${Constants.imageViewer.height}vh * ${Constants.imageViewer.ratio})`
+    },
+
+    gapiClient: {
+        apiKey: 'AIzaSyDwJ7EKjHmTfy44hQMbvR5HEdMgkUjn2fw',
+        clientId: '663092351374-h370k8odhj2gtcd5rrp1qo8mkcs9gkvr.apps.googleusercontent.com',
+        discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+        scope: 'https://www.googleapis.com/auth/drive.metadata.readonly',
+        fields: 'files(*)'
     }
 }
