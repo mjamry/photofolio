@@ -76,7 +76,6 @@ export const useImageLoadingHelper = () => {
     const load = async (index: number): Promise<string> => {
         return new Promise<string>((resolve, reject) => 
         {
-            appDispatch({type: ImageDataStateActions.setCurrentIndex, payload: index})
             const imageSrc = imageDataState.imagesData[index].webContentLink
             
             const img = new Image()
@@ -87,6 +86,7 @@ export const useImageLoadingHelper = () => {
             img.src = imageSrc
             
             setAction(ImageLoadingStep.loading)  
+            appDispatch({type: ImageDataStateActions.setCurrentIndex, payload: index})
         })
     }
     
