@@ -39,9 +39,11 @@ const useStyles = makeStyles({
     },
     activeStripe: {
         width: SETTINGS.activeWidth,
+
+        borderBottom: '3px solid rgba(0, 0, 0, .5)',
     },
     activeNumber: {
-        opacity: '.5'
+        opacity: '.75'
     },
     hiddenNumber: {
         opacity: '0'
@@ -65,18 +67,22 @@ const useStyles = makeStyles({
     },
     '@keyframes showStripe':{
         from: {
-            width: SETTINGS.normalWidth
+            width: SETTINGS.normalWidth,
+            borderBottom: '2px solid rgba(0, 0, 0, .25)',
         },
         to: {
-            width: SETTINGS.activeWidth
+            width: SETTINGS.activeWidth,
+            borderBottom: '3px solid rgba(0, 0, 0, .5)',
         }
     },
     '@keyframes hideStripe':{
         from: {
-            width: SETTINGS.activeWidth
+            width: SETTINGS.activeWidth,
+            borderBottom: '3px solid rgba(0, 0, 0, .5)',
         },
         to: {
-            width: SETTINGS.normalWidth
+            width: SETTINGS.normalWidth,
+            borderBottom: '2px solid rgba(0, 0, 0, .25)',
         }
     },    
     '@keyframes showNumber':{
@@ -84,12 +90,12 @@ const useStyles = makeStyles({
             opacity: '0'
         },
         to: {
-            opacity: '.5'
+            opacity: '.75'
         }
     },
     '@keyframes hideNumber':{
         from: {
-            opacity: '.5'
+            opacity: '.75'
         },
         to: {
             opacity: '0'
