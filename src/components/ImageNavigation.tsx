@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { IconButton } from '@material-ui/core';
+import { useImageLoadingState } from '../state/AppState';
+import { ImageLoadingStep } from '../state/ImageLoadingState';
 
 export type Props = {
     currentItemIndex: number, 
@@ -25,8 +27,23 @@ const useStyles = makeStyles({
 const ImageNavigation = (props: Props) => {
     const classes = useStyles()
 
+    const imageLoading = useImageLoadingState()
+    const [isActive, setIsActive] = useState<boolean>(false)
+
+    useEffect(()=>
+    {
+        let isActive = false
+        switch(imageLoading.currentStep){
+            case ImageLoadingStep.none:
+                isActive = true
+                break
+        }
+
+        setIsActive(isActive)
+    }, [imageLoading.currentStep])
+
     const renderNext = () => {
-        const isDisabled = !(props.currentItemIndex < props.numberOfItems - 1)
+        const isDisabled = !(props.currentItemIndex < props.numberOfItems - 1) || !isActive
         
         return  <IconButton 
                     className={classes.button} 
@@ -38,7 +55,7 @@ const ImageNavigation = (props: Props) => {
     }
 
     const renderBefore = () => {
-        const isDisabled = !(props.currentItemIndex > 0)
+        const isDisabled = !(props.currentItemIndex > 0) || !isActive
         
         return  <IconButton 
                     className={classes.button} 
