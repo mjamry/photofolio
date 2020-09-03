@@ -51,7 +51,6 @@ export const useImageDataService = (): ImageDataService => {
         {
             const imagesData = response.result.files as ImageDTO[]
             dispatchState({type: ImageDataStateActions.setImageData, payload: imagesData});
-            console.log(imagesData);
         }
         else
         {

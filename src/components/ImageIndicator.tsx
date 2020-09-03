@@ -156,9 +156,6 @@ const ImageIndicator = (props: Props) => {
     }
 
     const renderStripes = (): React.ReactNode[] => {
-
-        console.log(numberAnimationClass)
-
         const {startIndex, endIndex} = indexCalculatorHelper(props.currentItemIndex, props.numberOfItems, props.numberOfItemsToShow)
         
         let output = []
