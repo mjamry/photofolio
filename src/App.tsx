@@ -11,133 +11,144 @@ import { useImageViewerSettings, useImageDataState, useAppDispatch, useImagesPat
 import { useImageDataService } from './services/ImageDataService';
 import { ImageDataStateActions } from './state/ImageDataState';
 import ImageNavigation from './components/ImageNavigation';
+import ImageIndicator from './components/ImageIndicator';
 
 const useStyles = makeStyles({
-  horizontalMenu: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    position: 'fixed',
-    top: '25px',
-    right: '150px',
-    width: '10vw'
-  },
-  verticatMenu: {
-    display: 'flex',
-    flexDirection: 'row',
-    top: '20px',
-    justifyContent: 'flex-start',
-    left: '20px',
-    position: 'fixed',
-  }, 
-  navigation: {
-    position: 'fixed',
-    width: '100vw',
-    left: '25px',
-    bottom: '20px',
-  },
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '10vh',
-},
+	horizontalMenu: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		position: 'fixed',
+		top: '25px',
+		right: '150px',
+		width: '10vw'
+	},
+	verticatMenu: {
+		display: 'flex',
+		flexDirection: 'row',
+		top: '20px',
+		justifyContent: 'flex-start',
+		left: '20px',
+		position: 'fixed',
+	}, 
+	navigation: {
+		position: 'fixed',
+		width: '100vw',
+		left: '25px',
+		bottom: '20px',
+	},
+	container: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: '10vh',
+	},
 })
 
 const App = () => {
-  const classes = useStyles();
+	const classes = useStyles();
 
-  const imaveViewerSettings = useImageViewerSettings()
-  const imageDataService = useImageDataService()
-  const imageDataState = useImageDataState()
-  const appStateDispatch = useAppDispatch()
-  const imagesPaths = useImagesPathsSettingsState()
+	const imaveViewerSettings = useImageViewerSettings()
+	const imageDataService = useImageDataService()
+	const imageDataState = useImageDataState()
+	const appStateDispatch = useAppDispatch()
+	const imagesPaths = useImagesPathsSettingsState()
 
-  const [image, setImage] = useState<string>('');
-  const [imagesPath, setImagesPath] = useState<string>(imagesPaths.landscapes.default)
+	const [image, setImage] = useState<string>('');
+	const [imagesPath, setImagesPath] = useState<string>(imagesPaths.landscapes.default)
 
-  
-  const handleNext = () => {
-    const newIndex = imageDataState.currentImageIndex + 1
-    appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
-  }
 
-  const handleBefore = () => {
-    const newIndex = imageDataState.currentImageIndex - 1
-    appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
-  }
+	const handleNext = () => {
+		const newIndex = imageDataState.currentImageIndex + 1
+		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+	}
 
-  const setCurrentImage = () => {
-    if(imageDataState.imagesData.length > 0){
-      setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
-    }
-  }
+	const handleBefore = () => {
+		const newIndex = imageDataState.currentImageIndex - 1
+		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+	}
 
-  const fetchImages = async () => {
-    await imageDataService.fetchImagesData(imagesPath)
-  }
+	const handleItemSelected = (newIndex: number) => {
+		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+	}
 
-  useEffect(() => {
-    const initialize = async () => {
-      await imageDataService.initialize()
-      fetchImages()
-    }
+	const setCurrentImage = () => {
+		if(imageDataState.imagesData.length > 0){
+			setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
+		}
+	}
 
-    initialize();
-  }, [])
+	const fetchImages = async () => {
+		await imageDataService.fetchImagesData(imagesPath)
+	}
 
-  useEffect(()=>
-  {
-    appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: 0})
-    setCurrentImage()
-  }, 
-  [imageDataState.imagesData])
+	useEffect(() => {
+		const initialize = async () => {
+			await imageDataService.initialize()
+			fetchImages()
+		}
 
-  useEffect(() => 
-  {
-    setCurrentImage()
-  }, 
-  [imageDataState.currentImageIndex])
+		initialize();
+	}, [])
 
-  useEffect(() => {
-    fetchImages()
-  },
-  [imagesPath])
+	useEffect(()=>
+	{
+		setCurrentImage()
+	}, 
+	[imageDataState.imagesData])
 
-  return (
-    <div>
-        <div className={classes.horizontalMenu}>
-            <Button>About</Button>
-            <Button>Contact</Button>
+	useEffect(() => 
+	{
+		setCurrentImage()
+	}, 
+	[imageDataState.currentImageIndex])
 
-        </div>
-        <div className={classes.verticatMenu}>
-            <Button onClick={()=>setImagesPath(imagesPaths.landscapes.default)}>Landscapes</Button>
-            <Button onClick={()=>setImagesPath(imagesPaths.people.default)}>People</Button>
-        </div>
+	useEffect(() => 
+	{
+		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: 0})
+		fetchImages()
+	},
+	[imagesPath])
 
-        <div className={classes.container}>
+	return (
+		<div>
+			<div className={classes.horizontalMenu}>
+				<Button>About</Button>
+				<Button>Contact</Button>
 
-            <ImageViewer 
-                imageSrc={image} 
-                height={imaveViewerSettings.height}
-                width={imaveViewerSettings.width}
-                duration={`${imaveViewerSettings.duration/1000}s`}
-                timingFunction={imaveViewerSettings.timingFunction}
-            />
-
-			<div className={classes.navigation}>
-			<ImageNavigation 
-				numberOfItems={imageDataState.imagesData.length} 
-				currentItemIndex={imageDataState.currentImageIndex} 
-				next={handleNext} 
-				before={handleBefore} />
 			</div>
-        </div>
+			<div className={classes.verticatMenu}>
+				<Button onClick={()=>setImagesPath(imagesPaths.landscapes.default)}>Landscapes</Button>
+				<Button onClick={()=>setImagesPath(imagesPaths.people.default)}>People</Button>
+			</div>
 
+			<div className={classes.container}>
 
-    </div>
-  );
+				<ImageViewer 
+					imageSrc={image} 
+					height={imaveViewerSettings.height}
+					width={imaveViewerSettings.width}
+					duration={`${imaveViewerSettings.duration/1000}s`}
+					timingFunction={imaveViewerSettings.timingFunction}
+				/>
+
+				<div className={classes.navigation}>
+					<ImageIndicator 
+						numberOfItems={imageDataState.imagesData.length} 
+						numberOfItemsToShow={10} 
+						currentItemIndex={imageDataState.currentImageIndex}
+						onClick={handleItemSelected} 
+					/>
+					<ImageNavigation 
+						numberOfItems={imageDataState.imagesData.length} 
+						currentItemIndex={imageDataState.currentImageIndex} 
+						next={handleNext} 
+						before={handleBefore} 
+					/>
+				</div>
+			</div>
+		</div>
+	)
 }
 
 export default App;
