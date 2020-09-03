@@ -8,7 +8,6 @@ export const useImageLoadingService = () => {
     const appDispatch = useAppDispatch()
     
     const [timer, setTimer] = useState<any | null>(null);
-    const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
     const setAction = (action: ImageLoadingStep) => 
     {
@@ -16,9 +15,9 @@ export const useImageLoadingService = () => {
     }
     
     const preLoad = async (): Promise<void> => {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => 
+        {
             clearTimeout(timer)
-            setIsLoaded(false)
             setAction(ImageLoadingStep.preLoading)
         
             setTimer(
@@ -38,12 +37,11 @@ export const useImageLoadingService = () => {
     }
 
     const load = async (imgSrc: string): Promise<void> => {
-        return new Promise<void>((resolve, reject) => {
-            
+        return new Promise<void>((resolve, reject) => 
+        {
             const img = new Image()
             img.onload = () => 
             {
-                setIsLoaded(true)
                 resolve()
             }
             img.src = imgSrc
