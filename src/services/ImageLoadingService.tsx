@@ -1,11 +1,48 @@
-import { useLoaderSettingsState, useAppDispatch } from "../state/AppState";
+import { useLoaderSettingsState, useAppDispatch, useImageDataState } from "../state/AppState";
 import { useState } from "react";
 import { ImageLoadingStep, ImageLoadingStateActions } from "../state/ImageLoadingState";
+import { ImageDataStateActions } from "../state/ImageDataState";
 
-export const useImageLoadingService = () => {
+export type ServiceOutput = {
+    loadNext: () => Promise<string>,
+    loadBefore: () => Promise<string>,
+    loadCustom: (index: number) => Promise<string>
+}
+
+export const useImageLoadingService = (): ServiceOutput => 
+{
+    const helper = useImageLoadingHelper()
+	const imageDataState = useImageDataState()
+
+    const next = async ():Promise<string> => 
+    {
+        const nextIndex = imageDataState.currentImageIndex + 1
+        return helper.loadImageByIndex(nextIndex)
+    }
+
+    const before = async ():Promise<string> => 
+    {
+        const beforeIndex = imageDataState.currentImageIndex - 1
+        return helper.loadImageByIndex(beforeIndex)
+    }
+
+    const custom = async (customIndex: number):Promise<string> => 
+    {
+        return helper.loadImageByIndex(customIndex)
+    } 
+    
+    return {
+        loadNext: next,
+        loadBefore: before,
+        loadCustom: custom
+    }
+}
+
+export const useImageLoadingHelper = () => {
     
     const loaderSettings = useLoaderSettingsState()
     const appDispatch = useAppDispatch()
+	const imageDataState = useImageDataState()
     
     const [timer, setTimer] = useState<any | null>(null);
 
@@ -36,28 +73,31 @@ export const useImageLoadingService = () => {
         )
     }
 
-    const load = async (imgSrc: string): Promise<void> => {
-        return new Promise<void>((resolve, reject) => 
+    const load = async (index: number): Promise<string> => {
+        return new Promise<string>((resolve, reject) => 
         {
+            appDispatch({type: ImageDataStateActions.setCurrentIndex, payload: index})
+            const imageSrc = imageDataState.imagesData[index].webContentLink
+            
             const img = new Image()
             img.onload = () => 
             {
-                resolve()
+                resolve(imageSrc)
             }
-            img.src = imgSrc
+            img.src = imageSrc
             
             setAction(ImageLoadingStep.loading)  
         })
     }
     
-    const loadImage = async (imgSrc: string): Promise<string> => {
+    const loadImage = async (index: number): Promise<string> => {
         await preLoad()
-        await load(imgSrc)
+        const imgSrc = await load(index)
         postLoad()
         return imgSrc
     }
 
     return {
-        loadImage: loadImage
+        loadImageByIndex: loadImage
     }
 }

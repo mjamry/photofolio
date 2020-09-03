@@ -12,6 +12,7 @@ import { useImageDataService } from './services/ImageDataService';
 import { ImageDataStateActions } from './state/ImageDataState';
 import ImageNavigation from './components/ImageNavigation';
 import ImageIndicator from './components/ImageIndicator';
+import { useImageLoadingService } from './services/ImageLoadingService';
 
 const useStyles = makeStyles({
 	horizontalMenu: {
@@ -53,28 +54,31 @@ const App = () => {
 	const imageDataState = useImageDataState()
 	const appStateDispatch = useAppDispatch()
 	const imagesPaths = useImagesPathsSettingsState()
+	const imageLoadingService = useImageLoadingService()
 
 	const [image, setImage] = useState<string>('');
 	const [imagesPath, setImagesPath] = useState<string>(imagesPaths.landscapes.default)
 
 
-	const handleNext = () => {
-		const newIndex = imageDataState.currentImageIndex + 1
-		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+	const handleNext = async () => {
+		const imgSrc = await imageLoadingService.loadNext()
+		setImage(imgSrc)
 	}
 
-	const handleBefore = () => {
-		const newIndex = imageDataState.currentImageIndex - 1
-		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+	const handleBefore = async () => {
+		const imgSrc = await imageLoadingService.loadBefore()
+		setImage(imgSrc)
 	}
 
-	const handleItemSelected = (newIndex: number) => {
-		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
+	const handleItemSelected = async (index: number) => {
+		const imgSrc = await imageLoadingService.loadCustom(index)
+		setImage(imgSrc)
 	}
 
-	const setCurrentImage = () => {
+	const setCurrentImage = async () => {
 		if(imageDataState.imagesData.length > 0){
-			setImage(imageDataState.imagesData[imageDataState.currentImageIndex].webContentLink)
+			const imgSrc = await imageLoadingService.loadCustom(0)
+			setImage(imgSrc)
 		}
 	}
 
@@ -96,12 +100,6 @@ const App = () => {
 		setCurrentImage()
 	}, 
 	[imageDataState.imagesData])
-
-	useEffect(() => 
-	{
-		setCurrentImage()
-	}, 
-	[imageDataState.currentImageIndex])
 
 	useEffect(() => 
 	{

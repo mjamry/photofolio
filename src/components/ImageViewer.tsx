@@ -79,13 +79,7 @@ const ImageViewer = (props: Props) => {
     const imageLoadingService = useImageLoadingService()
  
     useEffect(() =>{
-        const load = async () => 
-        {
-            const result = await imageLoadingService.loadImage(props.imageSrc)
-            imageRef.current!.src = result
-        }
-
-        load()
+        imageRef.current!.src = props.imageSrc
     }, [props.imageSrc])
 
     useEffect(()=>{
