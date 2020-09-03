@@ -10,6 +10,7 @@ import './App.css';
 import { useImageViewerSettings, useImageDataState, useAppDispatch, useImagesPathsSettingsState } from './state/AppState';
 import { useImageDataService } from './services/ImageDataService';
 import { ImageDataStateActions } from './state/ImageDataState';
+import ImageNavigation from './components/ImageNavigation';
 
 const useStyles = makeStyles({
   horizontalMenu: {
@@ -29,14 +30,18 @@ const useStyles = makeStyles({
     left: '20px',
     position: 'fixed',
   }, 
-
-  downButton: {
+  navigation: {
     position: 'fixed',
     width: '100vw',
-    height: '20px',
-    bottom: '50px',
-    textAlign: 'center'
-  }
+    left: '25px',
+    bottom: '20px',
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '10vh',
+},
 })
 
 const App = () => {
@@ -52,12 +57,12 @@ const App = () => {
   const [imagesPath, setImagesPath] = useState<string>(imagesPaths.landscapes.default)
 
   
-  const handleDownButtonClick = () => {
+  const handleNext = () => {
     const newIndex = imageDataState.currentImageIndex + 1
     appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
   }
 
-  const handleUpButtonClick = () => {
+  const handleBefore = () => {
     const newIndex = imageDataState.currentImageIndex - 1
     appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: newIndex})
   }
@@ -69,9 +74,7 @@ const App = () => {
   }
 
   const fetchImages = async () => {
-    console.log("START LOADING PATH: "+imagesPath)
     await imageDataService.fetchImagesData(imagesPath)
-    console.log("END LOADING PATH: "+imagesPath)
   }
 
   useEffect(() => {
@@ -103,32 +106,36 @@ const App = () => {
 
   return (
     <div>
-      <div className={classes.horizontalMenu}>
-        <Button>About</Button>
-        <Button>Contact</Button>
+        <div className={classes.horizontalMenu}>
+            <Button>About</Button>
+            <Button>Contact</Button>
 
-      </div>
-      <div className={classes.verticatMenu}>
-        <Button onClick={()=>setImagesPath(imagesPaths.landscapes.default)}>Landscapes</Button>
-        <Button onClick={()=>setImagesPath(imagesPaths.people.default)}>People</Button>
-      </div>
+        </div>
+        <div className={classes.verticatMenu}>
+            <Button onClick={()=>setImagesPath(imagesPaths.landscapes.default)}>Landscapes</Button>
+            <Button onClick={()=>setImagesPath(imagesPaths.people.default)}>People</Button>
+        </div>
 
-      <ImageViewer 
-        imageSrc={image} 
-        height={imaveViewerSettings.height}
-        width={imaveViewerSettings.width}
-        duration={`${imaveViewerSettings.duration/1000}s`}
-        timingFunction={imaveViewerSettings.timingFunction}
-      />
+        <div className={classes.container}>
 
-      <div className={classes.downButton}>
-        <IconButton onClick={()=>handleDownButtonClick()}>
-          <ExpandMoreIcon fontSize="large" />
-        </IconButton>
-        <IconButton onClick={()=>handleUpButtonClick()}>
-          <ExpandLessIcon fontSize="large" />
-        </IconButton>
-      </div>
+            <ImageViewer 
+                imageSrc={image} 
+                height={imaveViewerSettings.height}
+                width={imaveViewerSettings.width}
+                duration={`${imaveViewerSettings.duration/1000}s`}
+                timingFunction={imaveViewerSettings.timingFunction}
+            />
+
+			<div className={classes.navigation}>
+			<ImageNavigation 
+				numberOfItems={imageDataState.imagesData.length} 
+				currentItemIndex={imageDataState.currentImageIndex} 
+				next={handleNext} 
+				before={handleBefore} />
+			</div>
+        </div>
+
+
     </div>
   );
 }
