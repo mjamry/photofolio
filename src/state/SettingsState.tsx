@@ -79,7 +79,7 @@ export const InitialSettingsState: SettingsState =
 
     imagesPaths: {
         landscapes: {
-            default: '11aXiiC9918ShCainZ4JQzTJLjlfHJPtJ'
+            default: '1cUV01b_dhLFTnN0ZRhWoQWP0rmqU0fd5'
         },
         people: {
             default: '0B6Fw2L7BBXZTQUQtOUZrLWF2TWc'
