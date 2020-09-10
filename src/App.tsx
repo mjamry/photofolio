@@ -13,30 +13,28 @@ import { ImageDataStateActions } from './state/ImageDataState';
 import ImageNavigation from './components/ImageNavigation';
 import ImageIndicator from './components/ImageIndicator';
 import { useImageLoadingService } from './services/ImageLoadingService';
+import StackContainer from './components/StackContainer';
+import Loader from './components/Loader';
 
 const useStyles = makeStyles({
 	horizontalMenu: {
 		display: 'flex',
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
-		position: 'fixed',
-		top: '25px',
-		right: '150px',
-		width: '10vw'
+		width: '100%',
+		position: 'relative',
+		right: 0,
+		bottom: 0
 	},
 	verticatMenu: {
 		display: 'flex',
-		flexDirection: 'row',
-		top: '20px',
+		flexDirection: 'column',
 		justifyContent: 'flex-start',
-		left: '20px',
-		position: 'fixed',
 	}, 
 	navigation: {
-		position: 'fixed',
-		width: '100vw',
-		left: '25px',
-		bottom: '20px',
+		height: '100%',
+		display: 'flex',
+		flexFlow: 'column',
+		justifyContent: 'flex-end',
 	},
 	container: {
 		display: 'flex',
@@ -110,27 +108,25 @@ const App = () => {
 
 	return (
 		<div>
-			<div className={classes.horizontalMenu}>
-				<Button>About</Button>
-				<Button>Contact</Button>
-
-			</div>
-			<div className={classes.verticatMenu}>
-				<Button onClick={()=>setImagesPath(imagesPaths.landscapes.default)}>Landscapes</Button>
-				<Button onClick={()=>setImagesPath(imagesPaths.people.default)}>People</Button>
-			</div>
+			
 
 			<div className={classes.container}>
 
-				<ImageViewer 
-					imageSrc={image} 
-					height={imaveViewerSettings.height}
-					width={imaveViewerSettings.width}
-					duration={`${imaveViewerSettings.duration/1000}s`}
-					timingFunction={imaveViewerSettings.timingFunction}
-				/>
-
+			<StackContainer
+				height={imaveViewerSettings.height}
+				width={imaveViewerSettings.width}
+			>
+				
 				<div className={classes.navigation}>
+					<div className={classes.horizontalMenu}>
+						<Button>About</Button>
+						<Button>Contact</Button>
+
+					</div>
+					<div className={classes.verticatMenu}>
+						<Button onClick={()=>setImagesPath(imagesPaths.landscapes.default)}>Landscapes</Button>
+						<Button onClick={()=>setImagesPath(imagesPaths.people.default)}>People</Button>
+					</div>
 					<ImageIndicator 
 						numberOfItems={imageDataState.imagesData.length} 
 						numberOfItemsToShow={10} 
@@ -143,7 +139,18 @@ const App = () => {
 						next={handleNext} 
 						before={handleBefore} 
 					/>
+
 				</div>
+
+				<Loader/>
+
+				<ImageViewer 
+					imageSrc={image} 
+					duration={`${imaveViewerSettings.duration/1000}s`}
+					timingFunction={imaveViewerSettings.timingFunction}
+				/>
+					
+			</StackContainer>
 			</div>
 		</div>
 	)
