@@ -7,34 +7,24 @@ import { useImageDataState, useImagesPathsSettingsState } from '../state/AppStat
 import HorizontalMenu from './HorizontalMenu'
 
 const useStyles = makeStyles({
-    container: {
-
+    navigator: {
+        height: '100%',
+        width: '100%',
+        position: 'relative',
     },
     imageNavigation: {
-
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'end',
+        position: 'absolute',
+        bottom: '10px',
+        right: '50px'
     },
-    categoryNavigation: {
-
+    indicator: {
+        position: 'absolute',
+        top: '20%',
+        left: '0',
     },
-    horizontalMenu: {
-		display: 'flex',
-		flexDirection: 'row',
-		width: '100%',
-		position: 'relative',
-		right: 0,
-		bottom: 0
-	},
-	verticatMenu: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'flex-start',
-	}, 
-	navigation: {
-		height: '100%',
-		display: 'flex',
-		flexFlow: 'column',
-		justifyContent: 'flex-end',
-	},
 })
 
 export type Props = {
@@ -50,24 +40,28 @@ const Navigator = (props: Props) => {
     const imageDataState = useImageDataState()
 
     return (
-        <div className={classes.container}>
+        <div className={classes.navigator}>
             <HorizontalMenu 
                 handleSelected={props.handleSelectPath}
             />
 
-            <ImageIndicator 
-                numberOfItems={imageDataState.imagesData.length} 
-                numberOfItemsToShow={10} 
-                currentItemIndex={imageDataState.currentImageIndex}
-                onClick={props.handleItemSelected} 
-            />
-            
-            <ImageNavigation 
-                numberOfItems={imageDataState.imagesData.length} 
-                currentItemIndex={imageDataState.currentImageIndex} 
-                next={props.handleNext} 
-                before={props.handleBefore} 
-            />
+            <div className={classes.indicator}>
+                <ImageIndicator 
+                    numberOfItems={imageDataState.imagesData.length} 
+                    numberOfItemsToShow={10} 
+                    currentItemIndex={imageDataState.currentImageIndex}
+                    onClick={props.handleItemSelected} 
+                />
+            </div>
+
+            <div className={classes.imageNavigation}>
+                <ImageNavigation 
+                    numberOfItems={imageDataState.imagesData.length} 
+                    currentItemIndex={imageDataState.currentImageIndex} 
+                    next={props.handleNext} 
+                    before={props.handleBefore} 
+                />
+            </div>
         </div>
     )
 }

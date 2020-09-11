@@ -4,14 +4,17 @@ import Button from '@material-ui/core/Button/Button'
 import { useImagesPathsSettingsState } from '../state/AppState'
 
 const useStyles = makeStyles({
-    container: {
-
-    },
     horizontalMenu: {
-
+        display: 'flex',
+        flexFlow: 'row',
+        justifyContent: 'space-between',
+        borderBottom: '1px solid rgba(0, 0, 0, .25)',
+        height: '30px',
+        padding: '10px',
     },
-    verticatMenu: {
-
+    leftMenu: {
+    },
+    rightMenu: {
     }
 })
 
@@ -25,16 +28,17 @@ const HorizontalMenu = (props: Props) => {
     const imagesPaths = useImagesPathsSettingsState()
     
     return (
-        <div className={classes.container}>
-            <div className={classes.horizontalMenu}>
+        <div className={classes.horizontalMenu}>
+            <div className={classes.leftMenu}>
+                <Button onClick={()=>props.handleSelected(imagesPaths.landscapes.default)}>Landscapes</Button>
+                <Button onClick={()=>props.handleSelected(imagesPaths.people.default)}>People</Button>
+            </div>
+            <div className={classes.rightMenu}>
                 <Button>About</Button>
                 <Button>Contact</Button>
 
             </div>
-            <div className={classes.verticatMenu}>
-                <Button onClick={()=>props.handleSelected(imagesPaths.landscapes.default)}>Landscapes</Button>
-                <Button onClick={()=>props.handleSelected(imagesPaths.people.default)}>People</Button>
-            </div>
+
         </div>
     )
 }
