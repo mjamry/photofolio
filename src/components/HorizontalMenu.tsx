@@ -9,7 +9,7 @@ const useStyles = makeStyles({
         display: 'flex',
         flexFlow: 'row',
         justifyContent: 'space-between',
-        borderBottom: '1px solid rgba(0, 0, 0, .25)',
+        borderBottom: '1px solid rgba(255, 255, 255, .25)',
         padding: '20px',
     },
     leftMenu: {

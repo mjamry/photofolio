@@ -19,7 +19,7 @@ const useStyles = makeStyles({
         flexFlow: 'row'
     },
     button: {
-        border: '2px solid rgba(0, 0, 0, .25)',
+        border: '2px solid rgba(255, 255, 255, .25)',
         scale: '0.75'
     },
 })

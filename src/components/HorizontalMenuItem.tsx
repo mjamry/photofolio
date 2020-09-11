@@ -9,6 +9,9 @@ const useStyles = makeStyles({
         fontSize: '8pt',
     },
     activeItem: {
+        '&::before':{
+            borderLeft: '1px solid white',
+        },
         cursor: 'pointer',
     }
 })

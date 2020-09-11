@@ -26,12 +26,12 @@ const useStyles = makeStyles({
     },
     stripe: {
         '&:hover':{
-            borderBottom: '4px solid rgba(0, 0, 0, .5)',
+            borderBottom: '2px solid rgba(255, 255, 255, 1)',
             cursor: 'pointer',
         },
         width: SETTINGS.normalWidth,
-        height: '12px',
-        borderBottom: '2px solid rgba(0, 0, 0, .25)',
+        height: '10px',
+        borderBottom: '2px solid rgba(255, 255, 255, .25)',
         marginBottom: '3px',
         marginTop: '3px',
         marginRight: '8px',
@@ -40,7 +40,7 @@ const useStyles = makeStyles({
     activeStripe: {
         width: SETTINGS.activeWidth,
 
-        borderBottom: '3px solid rgba(0, 0, 0, .5)',
+        borderBottom: '1px solid rgba(255, 255, 255, 1)',
     },
     activeNumber: {
         opacity: '.75'
@@ -68,21 +68,21 @@ const useStyles = makeStyles({
     '@keyframes showStripe':{
         from: {
             width: SETTINGS.normalWidth,
-            borderBottom: '2px solid rgba(0, 0, 0, .25)',
+            borderBottom: '2px solid rgba(255, 255, 255, .5)',
         },
         to: {
             width: SETTINGS.activeWidth,
-            borderBottom: '3px solid rgba(0, 0, 0, .5)',
+            borderBottom: '3px solid rgba(255, 255, 255, .5)',
         }
     },
     '@keyframes hideStripe':{
         from: {
             width: SETTINGS.activeWidth,
-            borderBottom: '3px solid rgba(0, 0, 0, .5)',
+            borderBottom: '3px solid rgba(255, 255, 255, .5)',
         },
         to: {
             width: SETTINGS.normalWidth,
-            borderBottom: '2px solid rgba(0, 0, 0, .25)',
+            borderBottom: '2px solid rgba(255, 255, 255, .25)',
         }
     },    
     '@keyframes showNumber':{
