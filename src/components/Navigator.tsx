@@ -5,6 +5,7 @@ import ImageIndicator from './ImageIndicator'
 import ImageNavigation from './ImageNavigation'
 import { useImageDataState, useImagesPathsSettingsState } from '../state/AppState'
 import HorizontalMenu from './HorizontalMenu'
+import HorizontalMenuItem, { HorizontalMenuItemPosition } from './HorizontalMenuItem'
 
 const useStyles = makeStyles({
     navigator: {
@@ -38,12 +39,36 @@ const Navigator = (props: Props) => {
     const classes = useStyles()
 
     const imageDataState = useImageDataState()
+    const imagesPaths = useImagesPathsSettingsState()
 
     return (
         <div className={classes.navigator}>
-            <HorizontalMenu 
-                handleSelected={props.handleSelectPath}
-            />
+            <HorizontalMenu>
+                <HorizontalMenuItem 
+                    title="Michal Jamry Photo" 
+                    position={HorizontalMenuItemPosition.left} 
+                />
+                <HorizontalMenuItem 
+                    title="Landscape" 
+                    onClick={()=>props.handleSelectPath(imagesPaths.landscapes.default)} 
+                    position={HorizontalMenuItemPosition.left} 
+                />
+                <HorizontalMenuItem 
+                    title="People" 
+                    onClick={()=>props.handleSelectPath(imagesPaths.people.default)} 
+                    position={HorizontalMenuItemPosition.left} 
+                />
+                <HorizontalMenuItem 
+                    title="About" 
+                    onClick={()=>console.log("About")} 
+                    position={HorizontalMenuItemPosition.right} 
+                />
+                <HorizontalMenuItem 
+                    title="Contact" 
+                    onClick={()=>console.log("Contact")} 
+                    position={HorizontalMenuItemPosition.right} 
+                />
+            </HorizontalMenu>
 
             <div className={classes.indicator}>
                 <ImageIndicator 

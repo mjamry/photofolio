@@ -2,6 +2,7 @@ import React from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button/Button'
 import { useImagesPathsSettingsState } from '../state/AppState'
+import HorizontalMenuItem, { HorizontalMenuItemPositionProps, HorizontalMenuItemPosition } from './HorizontalMenuItem'
 
 const useStyles = makeStyles({
     horizontalMenu: {
@@ -9,36 +10,50 @@ const useStyles = makeStyles({
         flexFlow: 'row',
         justifyContent: 'space-between',
         borderBottom: '1px solid rgba(0, 0, 0, .25)',
-        height: '30px',
-        padding: '10px',
+        padding: '20px',
     },
     leftMenu: {
+        display: 'flex',
+        flexFlow: 'row',
     },
     rightMenu: {
+        display: 'flex',
+        flexFlow: 'row',
+    },
+    centerMenu: {
+        display: 'flex',
+        flexFlow: 'row',
+
     }
 })
 
 export type Props = {
-    handleSelected: (path: string) => void
+    children: React.ReactElement<HorizontalMenuItemPositionProps> | React.ReactElement<HorizontalMenuItemPositionProps>[]
 }
 
 const HorizontalMenu = (props: Props) => {
     const classes = useStyles()
-
-    const imagesPaths = useImagesPathsSettingsState()
     
     return (
-        <div className={classes.horizontalMenu}>
+        <div className={classes.horizontalMenu}>    
+
             <div className={classes.leftMenu}>
-                <Button onClick={()=>props.handleSelected(imagesPaths.landscapes.default)}>Landscapes</Button>
-                <Button onClick={()=>props.handleSelected(imagesPaths.people.default)}>People</Button>
+                {React.Children.map(props.children, child => {
+                    return child.props.position === HorizontalMenuItemPosition.left ? child : null
+                })}
             </div>
+
+            <div className={classes.centerMenu}>
+                {React.Children.map(props.children, child => {
+                    return child.props.position === HorizontalMenuItemPosition.center ? child : null
+                })}
+            </div>
+
             <div className={classes.rightMenu}>
-                <Button>About</Button>
-                <Button>Contact</Button>
-
+                {React.Children.map(props.children, child => {
+                    return child.props.position === HorizontalMenuItemPosition.right ? child : null
+                })}
             </div>
-
         </div>
     )
 }
