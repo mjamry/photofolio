@@ -6,6 +6,7 @@ import ImageNavigation from './ImageNavigation'
 import { useImageDataState, useImagesPathsSettingsState } from '../state/AppState'
 import HorizontalMenu from './HorizontalMenu'
 import HorizontalMenuItem, { HorizontalMenuItemPosition } from './HorizontalMenuItem'
+import SocialMediaMenu from './SocialMediaMenu'
 
 const useStyles = makeStyles({
     navigator: {
@@ -26,6 +27,11 @@ const useStyles = makeStyles({
         top: '20%',
         left: '0',
     },
+    socialButtons:{
+        position: 'absolute',
+        bottom: '10px',
+        left: '10px',
+    }
 })
 
 export type Props = {
@@ -49,7 +55,7 @@ const Navigator = (props: Props) => {
                     position={HorizontalMenuItemPosition.left} 
                 />
                 <HorizontalMenuItem 
-                    title="Landscape" 
+                    title="Landscapes" 
                     onClick={()=>props.handleSelectPath(imagesPaths.landscapes.default)} 
                     position={HorizontalMenuItemPosition.left} 
                 />
@@ -86,6 +92,10 @@ const Navigator = (props: Props) => {
                     next={props.handleNext} 
                     before={props.handleBefore} 
                 />
+            </div>
+
+            <div className={classes.socialButtons}>
+                <SocialMediaMenu />
             </div>
         </div>
     )
