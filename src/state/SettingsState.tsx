@@ -80,7 +80,7 @@ export const InitialSettingsState: SettingsState =
         clientId: '663092351374-h370k8odhj2gtcd5rrp1qo8mkcs9gkvr.apps.googleusercontent.com',
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
         scope: 'https://www.googleapis.com/auth/drive.metadata.readonly',
-        fields: 'files(*)'
+        fields: 'files(id,name,mimeType,webContentLink,hasThumbnail)'
     },
 
     imagesPaths: {
