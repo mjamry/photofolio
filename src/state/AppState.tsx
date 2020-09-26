@@ -82,6 +82,7 @@ export {
     useImageDataState, 
     useGapiClientSettingsState,
     useImagesPathsSettingsState,
+    useImageIndicatorSettings
 }
 
 const useAppState = () => {
@@ -119,6 +120,10 @@ const useImagesPathsSettingsState = () => {
 
 const useImageViewerSettings = () => {
     return useAppState().settings.imageViewer
+}
+
+const useImageIndicatorSettings = () => {
+    return useAppState().settings.imageIndicator
 }
 
 const useAppDispatch = () => {

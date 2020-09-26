@@ -21,8 +21,8 @@ export type SettingsState =
         people: {
             default: string,
         }
-    }
-
+    },
+    imageIndicator: ImageIndicatorSettingsState,
 }
 
 export type LoaderSettingsState = 
@@ -33,6 +33,12 @@ export type LoaderSettingsState =
     duration: number,
     timingFunction: string,
     animationTimeout: number,
+}
+
+export type ImageIndicatorSettingsState = {
+    stripeWidth: string,
+    stripeHeight: string,
+    activeStripeWidth: string,
 }
 
 export const SettingsStateActions = {
@@ -84,5 +90,11 @@ export const InitialSettingsState: SettingsState =
         people: {
             default: '0B6Fw2L7BBXZTQUQtOUZrLWF2TWc'
         }
+    },
+
+    imageIndicator: {
+        stripeWidth: '50px',
+        stripeHeight: '20px',
+        activeStripeWidth: '75px',
     }
 }

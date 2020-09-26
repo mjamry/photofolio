@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
-import { useImageLoadingState } from '../state/AppState';
+import { useImageLoadingState, useImageIndicatorSettings } from '../state/AppState';
 import { ImageLoadingStep } from '../state/ImageLoadingState';
 
 export type Props = {
@@ -124,7 +124,8 @@ const indexCalculatorHelper = (
 }
 
 const ImageIndicator = (props: Props) => {
-    const classes = useStyles()
+    const settings = useImageIndicatorSettings()
+    const classes = useStyles(settings)
     const activeStripeRef = useRef<HTMLDivElement>(null)
     const [stripeAnimationClass, setStripeAnimationClass] = useState("")
     const [numberAnimationClass, setNumberAnimationClass] = useState("")
@@ -161,6 +162,31 @@ const ImageIndicator = (props: Props) => {
         return (index > 8 ? index + 1 : `0${index+1}`)
     }
 
+    const renderStripe = (index: number) => {
+        return (
+            <div 
+                className={classes.indocator} 
+                key={index} 
+                onClick={()=>props.onClick(index)}
+            >
+                <div className={classes.stripe} />
+            </div>
+        )
+    }
+
+    const renderActiveStripe = (index: number) => {
+        return (
+            <div 
+                className={`${classes.indocator}`} 
+                key={index} 
+                ref={activeStripeRef}
+            >
+                <div className={`${classes.stripe} ${stripeAnimationClass} `} />
+                <div className={`${numberAnimationClass}`}>{renderItemNumber(index)}</div>
+            </div>
+        )
+    }
+
     const renderStripes = (): React.ReactNode[] => {
         const {startIndex, endIndex} = indexCalculatorHelper(props.currentItemIndex, props.numberOfItems, props.numberOfItemsToShow)
         
@@ -168,23 +194,9 @@ const ImageIndicator = (props: Props) => {
         for(let i = startIndex; i < endIndex; i++){
             output.push(
                 i === props.currentItemIndex 
-
-                ? <div 
-                    className={`${classes.indocator}`} 
-                    key={i} 
-                    ref={activeStripeRef}
-                >
-                    <div className={`${classes.stripe} ${stripeAnimationClass} `} />
-                    <div className={`${numberAnimationClass}`}>{renderItemNumber(i)}</div>
-                </div>
-
-                : <div 
-                    className={classes.indocator} 
-                    key={i} 
-                    onClick={()=>props.onClick(i)}
-                >
-                    <div className={classes.stripe} />
-                </div>)
+                ? renderActiveStripe(i) 
+                : renderStripe(i)
+            )
         }
 
         return output
