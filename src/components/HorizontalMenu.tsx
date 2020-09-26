@@ -1,16 +1,18 @@
 import React from 'react'
-import {makeStyles} from '@material-ui/core/styles'
+import {makeStyles, Theme} from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button/Button'
 import { useImagesPathsSettingsState } from '../state/AppState'
 import HorizontalMenuItem, { HorizontalMenuItemPositionProps, HorizontalMenuItemPosition } from './HorizontalMenuItem'
+import {fade} from '@material-ui/core/styles/colorManipulator'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     horizontalMenu: {
         display: 'flex',
         flexFlow: 'row',
         justifyContent: 'space-between',
-        borderBottom: '1px solid rgba(255, 255, 255, .25)',
+        borderBottom: `1px solid ${fade(theme.palette.primary.main, .25)}`,
         padding: '20px',
+        color: theme.palette.primary.main,
     },
     leftMenu: {
         display: 'flex',
@@ -25,7 +27,7 @@ const useStyles = makeStyles({
         flexFlow: 'row',
 
     }
-})
+}))
 
 export type Props = {
     children: React.ReactElement<HorizontalMenuItemPositionProps> | React.ReactElement<HorizontalMenuItemPositionProps>[]
