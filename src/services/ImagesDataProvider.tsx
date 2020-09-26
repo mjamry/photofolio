@@ -51,12 +51,8 @@ export const useImagesDataProvider = (): ImagesDataProvider => {
         if(response.status === 200) 
         {
             const data = response.result.files as ImageDataDTO[]
-            console.log(data)
-            
             const details = await helper.getDetails(data)
-            console.log(details)
             const images = await helper.getImagesDataWithDetails(data, details)
-            console.log(images)
 
             dispatchState({type: ImageDataStateActions.setImageData, payload: images});
         }
@@ -93,7 +89,6 @@ const useDataProviderHelper = () => {
         return data.reduce<ImageDTO[]>((result, img) => {
             const imgDetails = details.find(i => i.name == img.name)
             if(imgDetails){
-                console.log({...img, ...imgDetails})
                 result.push({...img, ...imgDetails})
             }
             
