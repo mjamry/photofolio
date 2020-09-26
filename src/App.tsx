@@ -11,6 +11,11 @@ import StackContainer from './components/StackContainer';
 import Loader from './components/Loader';
 import Navigator from './components/Navigator';
 
+import {
+	createMuiTheme,
+	ThemeProvider,
+  } from '@material-ui/core/styles';
+
 const useStyles = makeStyles({
 	container: {
 		display: 'flex',
@@ -18,6 +23,28 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		marginTop: '10vh',
 	},
+})
+
+const lightTheme = createMuiTheme({
+	palette: {
+		primary: {
+			main: '#fff'
+		},
+		secondary: {
+			main: '#fff'
+		}
+	}
+  });
+
+const darkTheme = createMuiTheme({
+	palette: {
+		primary: {
+			main: '#000'
+		},
+		secondary: {
+			main: '#fff'
+		}
+	}
 })
 
 const App = () => {
@@ -83,26 +110,29 @@ const App = () => {
 
 	return (
 		<div className={classes.container}>
-			<StackContainer
-				height={imaveViewerSettings.height}
-				width={imaveViewerSettings.width}
-			>
-				<Navigator 
-					handleNext={handleNext} 
-					handleBefore={handleBefore} 
-					handleItemSelected={handleItemSelected}
-					handleSelectPath={setImagesPath}
-				/>
+			<ThemeProvider theme={darkTheme}>
+				<StackContainer
+					height={imaveViewerSettings.height}
+					width={imaveViewerSettings.width}
+				>
+					<Navigator 
+						handleNext={handleNext} 
+						handleBefore={handleBefore} 
+						handleItemSelected={handleItemSelected}
+						handleSelectPath={setImagesPath}
+					/>
 
-				<Loader/>
+					<Loader/>
 
-				<ImageViewer 
-					imageSrc={image} 
-					duration={`${imaveViewerSettings.duration/1000}s`}
-					timingFunction={imaveViewerSettings.timingFunction}
-				/>
 					
-			</StackContainer>
+						<ImageViewer 
+							imageSrc={image} 
+							duration={`${imaveViewerSettings.duration/1000}s`}
+							timingFunction={imaveViewerSettings.timingFunction}
+						/>
+						
+				</StackContainer>
+			</ThemeProvider>
 		</div>
 	)
 }

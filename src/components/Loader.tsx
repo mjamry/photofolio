@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {makeStyles, Theme} from '@material-ui/core/styles'
+import {makeStyles, Theme, createStyles} from '@material-ui/core/styles'
 import LoaderElement from './LoaderElement';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {useImageLoadingState, useAppDispatch, useLoaderSettingsState} from './../state/AppState'
 import { ImageLoadingStep, ImageLoadingStateActions } from '../state/ImageLoadingState';
 import { LoaderSettingsState } from '../state/SettingsState';
 
-const useStyles = makeStyles<Theme, LoaderSettingsState>({
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         display: 'flex',
         flexFlow: 'row',
@@ -15,12 +15,12 @@ const useStyles = makeStyles<Theme, LoaderSettingsState>({
     loaderContainer: props => ({
         width: '100%',
         height: '100%',
-        backgroundColor: props.color,
+        backgroundColor: theme.palette.secondary.main,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
     }),
-})
+}))
 
 const Loader = () => {
  
@@ -36,7 +36,6 @@ const Loader = () => {
                 action={action} 
                 key={i}
                 width={`${100/numberOfElements}%`}
-                color={loaderSettings.color}
                 delay={`${i*loaderSettings.delay/1000}s`}
                 duration={`${loaderSettings.duration/1000}s`}
                 timingFunction={loaderSettings.timingFunction}

@@ -28,7 +28,6 @@ export type SettingsState =
 export type LoaderSettingsState = 
 {
     numberOfElements: number, 
-    color: string,
     delay: number, 
     duration: number,
     timingFunction: string,
@@ -61,7 +60,6 @@ export const InitialSettingsState: SettingsState =
 {
     loader: {
         numberOfElements: Constants.loader.numberOfElements, 
-        color: 'white',
         delay: Constants.loader.delayInMs, 
         duration: Constants.loader.durationInMs,
         timingFunction: 'cubic-bezier(.90, 0, .30, 1)',

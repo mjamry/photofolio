@@ -10,7 +10,6 @@ type Props = UIProps & {
 type UIProps = {
     delay: string,
     duration: string,
-    color: string,
     width: string,
     timingFunction: string,
 }
@@ -21,7 +20,7 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) => ({
         width: props.width,
     }),
     loader: props => ({
-        backgroundColor: props.color,
+        backgroundColor: theme.palette.secondary.main,
     }),
     animation: props => ({
         animationFillMode: 'both',
