@@ -4,7 +4,7 @@ import {makeStyles} from "@material-ui/core/styles"
 import ImageViewer from "./components/ImageViewer"
 import './App.css';
 import { useImageViewerSettings, useImageDataState, useAppDispatch, useImagesPathsSettingsState } from './state/AppState';
-import { useImageDataService } from './services/ImageDataService';
+import { useImagesDataProvider } from './services/ImagesDataProvider';
 import { ImageDataStateActions } from './state/ImageDataState';
 import { useImageLoadingService } from './services/ImageLoadingService';
 import StackContainer from './components/StackContainer';
@@ -24,7 +24,7 @@ const App = () => {
 	const classes = useStyles();
 
 	const imaveViewerSettings = useImageViewerSettings()
-	const imageDataService = useImageDataService()
+	const imagesDataProvider = useImagesDataProvider()
 	const imageDataState = useImageDataState()
 	const appStateDispatch = useAppDispatch()
 	const imageLoadingService = useImageLoadingService()
@@ -56,12 +56,12 @@ const App = () => {
 	}
 
 	const fetchImages = async () => {
-		await imageDataService.fetchImagesData(imagesPath)
+		await imagesDataProvider.fetchImagesData(imagesPath)
 	}
 
 	useEffect(() => {
 		const initialize = async () => {
-			await imageDataService.initialize()
+			await imagesDataProvider.initialize()
 			fetchImages()
 		}
 
