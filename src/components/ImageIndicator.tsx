@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import {makeStyles} from '@material-ui/core/styles'
+import {makeStyles, Theme} from '@material-ui/core/styles'
 import { useImageLoadingState, useImageIndicatorSettings } from '../state/AppState';
-import { ImageLoadingStep } from '../state/ImageLoadingState';
+import { ImageLoadingStep } from '../state/ImageLoadingState'
+import {fade} from '@material-ui/core/styles/colorManipulator'
 
 export type Props = {
     numberOfItems: number,
@@ -15,23 +16,24 @@ const SETTINGS = {
     activeWidth: '75px',
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     container: {
         display: 'flex',
         flexFlow: 'column',
     },
     indocator: {
         display: 'flex',
-        flexFlow: 'row'
+        flexFlow: 'row',
+        color: theme.palette.primary.main,
     },
     stripe: {
         '&:hover':{
-            borderBottom: '2px solid rgba(255, 255, 255, 1)',
+            borderBottom: `2px solid ${fade(theme.palette.primary.main, 1)}`,
             cursor: 'pointer',
         },
         width: SETTINGS.normalWidth,
         height: '10px',
-        borderBottom: '2px solid rgba(255, 255, 255, .25)',
+        borderBottom: `2px solid ${fade(theme.palette.primary.main, .25)}`,
         marginBottom: '3px',
         marginTop: '3px',
         marginRight: '8px',
@@ -40,7 +42,7 @@ const useStyles = makeStyles({
     activeStripe: {
         width: SETTINGS.activeWidth,
 
-        borderBottom: '1px solid rgba(255, 255, 255, 1)',
+        borderBottom: `1px solid ${fade(theme.palette.primary.main, 1)}`,
     },
     activeNumber: {
         opacity: '.75'
@@ -68,21 +70,21 @@ const useStyles = makeStyles({
     '@keyframes showStripe':{
         from: {
             width: SETTINGS.normalWidth,
-            borderBottom: '2px solid rgba(255, 255, 255, .5)',
+            borderBottom: `2px solid ${fade(theme.palette.primary.main, .5)}`,
         },
         to: {
             width: SETTINGS.activeWidth,
-            borderBottom: '3px solid rgba(255, 255, 255, .5)',
+            borderBottom: `3px solid ${fade(theme.palette.primary.main, .5)}`,
         }
     },
     '@keyframes hideStripe':{
         from: {
             width: SETTINGS.activeWidth,
-            borderBottom: '3px solid rgba(255, 255, 255, .5)',
+            borderBottom: `3px solid ${fade(theme.palette.primary.main, .5)}`,
         },
         to: {
             width: SETTINGS.normalWidth,
-            borderBottom: '2px solid rgba(255, 255, 255, .25)',
+            borderBottom: `2px solid ${fade(theme.palette.primary.main, .25)}`,
         }
     },    
     '@keyframes showNumber':{
@@ -101,7 +103,7 @@ const useStyles = makeStyles({
             opacity: '0'
         }
     }
-})
+}))
 
 const indexCalculatorHelper = (
     currentIndex: number, 
