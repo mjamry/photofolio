@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     activeStripe: {
         width: SETTINGS.activeWidth,
 
-        borderBottom: `1px solid ${fade(theme.palette.primary.main, 1)}`,
+        borderBottom: `2px solid ${fade(theme.palette.primary.main, 1)}`,
     },
     activeNumber: {
         opacity: '.75'
