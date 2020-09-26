@@ -9,12 +9,32 @@ export type ImageMetadataDTO = {
     time: string,
 }
 
-export type ImageDTO = {
+export const FileMimeTypes = {
+    images: {
+        png: "image/png",
+    },
+    json: "application/json",
+    folder: "application/vnd.google-apps.folder",
+}
+
+enum ThemeType { 
+    light,
+    dark
+}
+
+export type ImageDataDTO = {
+    id: string,
     name: string,
-    descriptipon: string,
-    thumbnailLink: string,
+    mimeType: string,
     webContentLink: string,
-    imageMediaMetadata: ImageMetadataDTO,
+    hasThumbnail: boolean,
+}
+
+export type ImageDTO = ImageDataDTO & ImagesDetailsDTO
+
+export type ImagesDetailsDTO = {
+    theme: string,
+    name: string,
 }
 
 export type ImageDataState = {
