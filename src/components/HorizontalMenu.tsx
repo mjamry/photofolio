@@ -1,9 +1,10 @@
 import React from 'react'
-import {makeStyles, Theme} from '@material-ui/core/styles'
+import {makeStyles} from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button/Button'
 import { useImagesPathsSettingsState } from '../state/AppState'
 import HorizontalMenuItem, { HorizontalMenuItemPositionProps, HorizontalMenuItemPosition } from './HorizontalMenuItem'
 import {fade} from '@material-ui/core/styles/colorManipulator'
+import {Theme} from '../ThemeProvider'
 
 const useStyles = makeStyles((theme: Theme) => ({
     horizontalMenu: {

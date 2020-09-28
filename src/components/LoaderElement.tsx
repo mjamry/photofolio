@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {makeStyles} from '@material-ui/core/styles'
-import {Theme} from '@material-ui/core'
+import {Theme} from '../ThemeProvider'
 import { ImageLoadingStep } from '../state/ImageLoadingState';
 
 type Props = UIProps & {

@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import {makeStyles, Theme} from '@material-ui/core/styles'
+import {makeStyles} from '@material-ui/core/styles'
 import { useImageLoadingState, useImageIndicatorSettings } from '../state/AppState';
 import { ImageLoadingStep } from '../state/ImageLoadingState'
 import {fade} from '@material-ui/core/styles/colorManipulator'
+import {Theme} from '../ThemeProvider'
 
 export type Props = {
     numberOfItems: number,

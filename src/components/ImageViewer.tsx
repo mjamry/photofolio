@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles'
 import Loader from './Loader'
 import { useImageLoadingState } from '../state/AppState'
 import { ImageLoadingStep } from '../state/ImageLoadingState'
-import {Theme} from '@material-ui/core'
+import {Theme} from '../ThemeProvider'
 
 import { useImageLoadingService } from '../services/ImageLoadingService'
 

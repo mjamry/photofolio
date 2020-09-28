@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
-import { IconButton, Theme } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import { useImageLoadingState } from '../state/AppState'
 import { ImageLoadingStep } from '../state/ImageLoadingState'
+import {Theme} from '../ThemeProvider'
 
 export type Props = {
     currentItemIndex: number, 

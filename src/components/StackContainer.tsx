@@ -1,5 +1,6 @@
 import React from 'react';
-import {makeStyles, Theme} from '@material-ui/core/styles'
+import {makeStyles} from '@material-ui/core/styles'
+import {Theme} from '../ThemeProvider'
 
 const useStyles = makeStyles<Theme, Props>({
     container: {
