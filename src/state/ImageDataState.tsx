@@ -17,9 +17,9 @@ export const FileMimeTypes = {
     folder: "application/vnd.google-apps.folder",
 }
 
-enum ThemeType { 
-    light,
-    dark
+export const ThemeType = { 
+    light: 'light',
+    dark: 'dark'
 }
 
 export type ImageDataDTO = {
@@ -39,10 +39,12 @@ export type ImagesDetailsDTO = {
 
 export type ImageDataState = {
     imagesData: ImageDTO[],
-    currentImageIndex: number
+    currentImageIndex: number,
+    uiTheme: string
 }
 
 export const ImageDataStateActions = {
     setImageData: 'setImageData',
     setCurrentIndex: 'setCurrentIndex',
+    setUiTheme: 'setUiTheme',
 }

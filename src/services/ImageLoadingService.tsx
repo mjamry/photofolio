@@ -87,6 +87,7 @@ export const useImageLoadingHelper = () => {
             
             setAction(ImageLoadingStep.loading)  
             appDispatch({type: ImageDataStateActions.setCurrentIndex, payload: index})
+            appDispatch({type: ImageDataStateActions.setUiTheme, payload: imageDataState.imagesData[index].theme})
         })
     }
     

@@ -2,7 +2,7 @@ import React, {createContext, useContext, useReducer} from 'react'
 import {AppState, AppStateReducerAction, AppDispatch } from './StateTypes'
 import { ImageLoadingStep, ImageLoadingState, ImageLoadingStateActions } from './ImageLoadingState'
 import { SettingsState, InitialSettingsState } from './SettingsState'
-import { ImageDataState, ImageDataStateActions } from './ImageDataState'
+import { ImageDataState, ImageDataStateActions, ThemeType } from './ImageDataState'
 
 type Props = {
     children: React.ReactNode,
@@ -15,7 +15,8 @@ const initialState: AppState = {
     },
     imageData: {
         currentImageIndex: 0,
-        imagesData: []
+        imagesData: [],
+        uiTheme: ThemeType.light,
     }
 }
 
@@ -39,10 +40,13 @@ const _imageDataReducer = (state: ImageDataState, action: AppStateReducerAction)
     switch(action.type) {
         case ImageDataStateActions.setCurrentIndex:
             state = {...state, currentImageIndex: action.payload}
-            break;
+            break
         case ImageDataStateActions.setImageData: 
             state = {...state, imagesData: action.payload}
-            break;
+            break
+        case ImageDataStateActions.setUiTheme:
+            state = {...state, uiTheme: action.payload}
+            break
     }
     
     return state

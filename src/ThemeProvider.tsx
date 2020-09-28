@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
-import {
-	createMuiTheme,
-	ThemeProvider as MaterialThemeProvider,
-  } from '@material-ui/core/styles'
+import React, { useState, useEffect } from 'react'
+import {createMuiTheme,ThemeProvider as MaterialThemeProvider} from '@material-ui/core/styles'
+import { useImageDataState } from './state/AppState';
+import { ThemeType } from './state/ImageDataState';
 
 export type Theme = {
     palette: {
@@ -42,7 +41,12 @@ const darkTheme: Theme = createMuiTheme({
 })
 
 const ThemeProvider = ({children}: Props) => {
-    const [theme, setTheme] = useState<Theme>(darkTheme)
+    const [theme, setTheme] = useState<Theme>(lightTheme)
+    const imageState = useImageDataState()
+
+    useEffect(() => {
+        setTheme(imageState.uiTheme === ThemeType.dark ? darkTheme : lightTheme)
+    }, [imageState.uiTheme])
 
     return (
         <MaterialThemeProvider theme={theme}>
