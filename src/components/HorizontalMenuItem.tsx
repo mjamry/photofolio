@@ -7,6 +7,7 @@ const useStyles = makeStyles({
         paddingRight: '10px',
         textTransform: 'uppercase',
         fontSize: '8pt',
+        userSelect: 'none',
     },
     activeItem: {
         '&::before':{

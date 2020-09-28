@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         display: 'flex',
         flexFlow: 'row',
         color: theme.palette.primary.main,
+        userSelect: 'none',
     },
     stripe: {
         '&:hover':{
