@@ -121,11 +121,6 @@ const Navigator = (props: Props) => {
                     position={HorizontalMenuItemPosition.left} 
                 />
                 <HorizontalMenuItem 
-                    title="test" 
-                    onClick={()=>props.handleSelectPath(imagesPaths.test.default)} 
-                    position={HorizontalMenuItemPosition.left} 
-                />
-                <HorizontalMenuItem 
                     title="About" 
                     onClick={()=>console.log("About")} 
                     position={HorizontalMenuItemPosition.right} 
