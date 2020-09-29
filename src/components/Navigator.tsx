@@ -1,18 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import { Button } from '@material-ui/core'
 import ImageIndicator from './ImageIndicator'
 import ImageNavigation from './ImageNavigation'
-import { useImageDataState, useImagesPathsSettingsState } from '../state/AppState'
+import { useImageDataState, useImagesPathsSettingsState, useImageLoadingState, useImageViewerSettings } from '../state/AppState'
 import HorizontalMenu from './HorizontalMenu'
 import HorizontalMenuItem, { HorizontalMenuItemPosition } from './HorizontalMenuItem'
 import SocialMediaMenu from './SocialMediaMenu'
+import { ImageLoadingStep } from '../state/ImageLoadingState'
+import { Theme } from '../ThemeProvider'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles<Theme, UIProps>({
     navigator: {
         height: '100%',
         width: '100%',
         position: 'relative',
+    },
+    hidden: {
+        display: 'none',
     },
     imageNavigation: {
         display: 'flex',
@@ -31,7 +36,35 @@ const useStyles = makeStyles({
         position: 'absolute',
         bottom: '10px',
         left: '10px',
-    }
+    },
+
+    animation: props => ({
+        animationFillMode: 'both',
+        animationDuration: `${props.duration/1000}s`,
+        animationTimingFunction: props.timingFunction,
+    }),
+    fadeInAnimation: {
+        animationName: '$fadeIn',
+    },
+    fadeOutAnimation: {
+        animationName: `$fadeOut`,
+    },
+    "@keyframes fadeIn": {
+        from: {
+            opacity: '0'
+        },
+        to: {
+            opacity: '1'
+        }
+    },
+    "@keyframes fadeOut": {
+        from: {
+            opacity: '1'
+        },
+        to: {
+            opacity: '0'
+        }
+    },
 })
 
 export type Props = {
@@ -41,14 +74,37 @@ export type Props = {
     handleSelectPath: (path: string) => void
 }
 
+type UIProps = {
+    duration: number,
+    timingFunction: string,
+}
+
 const Navigator = (props: Props) => {
-    const classes = useStyles()
+    const imageViewerSettings = useImageViewerSettings()
+    const classes = useStyles(imageViewerSettings as UIProps)
+    const [animation, setAnimation] = useState("")
 
     const imageDataState = useImageDataState()
     const imagesPaths = useImagesPathsSettingsState()
+    const imageLoadingState = useImageLoadingState()
+
+    useEffect(() => {
+        switch(imageLoadingState.currentStep) {
+            case ImageLoadingStep.preLoading:
+                setAnimation(classes.fadeOutAnimation)
+                break
+            case ImageLoadingStep.postLoading:
+                setAnimation(classes.fadeInAnimation)
+                break
+        }
+    }, [imageLoadingState.currentStep])
 
     return (
-        <div className={classes.navigator}>
+        <div className={`
+            ${classes.navigator} 
+            ${animation}
+            ${classes.animation}`} 
+        >
             <HorizontalMenu>
                 <HorizontalMenuItem 
                     title="Michal Jamry Photo" 
@@ -62,6 +118,11 @@ const Navigator = (props: Props) => {
                 <HorizontalMenuItem 
                     title="People" 
                     onClick={()=>props.handleSelectPath(imagesPaths.people.default)} 
+                    position={HorizontalMenuItemPosition.left} 
+                />
+                <HorizontalMenuItem 
+                    title="test" 
+                    onClick={()=>props.handleSelectPath(imagesPaths.test.default)} 
                     position={HorizontalMenuItemPosition.left} 
                 />
                 <HorizontalMenuItem 
