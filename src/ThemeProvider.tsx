@@ -21,7 +21,7 @@ type Props = {
 const lightTheme: Theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#aaddbb'
+			main: '#fff'
 		},
 		secondary: {
 			main: '#fff'
@@ -32,7 +32,7 @@ const lightTheme: Theme = createMuiTheme({
 const darkTheme: Theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#005511'
+			main: '#000'
 		},
 		secondary: {
 			main: '#fff'
