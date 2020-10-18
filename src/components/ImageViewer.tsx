@@ -82,6 +82,7 @@ const ImageViewer = (props: Props) => {
             <img 
                 ref={imageRef}
                 className={`${classes.image} ${classes.animation} ${animationClass}`} 
+                alt=""
             />
         </div>
     )
