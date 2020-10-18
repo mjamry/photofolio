@@ -160,7 +160,9 @@ const ImageIndicator = (props: Props) => {
         setStripeAnimationClass(stripeAnimation)
         setNumberAnimationClass(numberAnimation)
 
-    }, [imageLoading.currentStep])
+    }, 
+    [imageLoading.currentStep, 
+    classes])
 
     const renderItemNumber = (index: number) => {
         return (index > 8 ? index + 1 : `0${index+1}`)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {makeStyles} from "@material-ui/core/styles"
 
 import ImageViewer from "./components/ImageViewer"
@@ -50,16 +50,10 @@ const App = () => {
 		setImage(imgSrc)
 	}
 
-	const setCurrentImage = async () => {
-		if(imageDataState.imagesData.length > 0){
-			const imgSrc = await imageLoadingService.loadCustom(0)
-			setImage(imgSrc)
-		}
-	}
-
-	const fetchImages = async () => {
+	const fetchImages = useCallback(async () => {
 		await imagesDataProvider.fetchImagesData(imagesPath)
-	}
+	}, 
+	[imagesDataProvider, imagesPath])
 
 	useEffect(() => {
 		const initialize = async () => {
@@ -68,20 +62,29 @@ const App = () => {
 		}
 
 		initialize();
-	}, [])
+	}, [fetchImages, imagesDataProvider])
 
 	useEffect(()=>
 	{
+		const setCurrentImage = async () => {
+			if(imageDataState.imagesData.length > 0){
+				const imgSrc = await imageLoadingService.loadCustom(0)
+				setImage(imgSrc)
+			}
+		}
+
 		setCurrentImage()
 	}, 
-	[imageDataState.imagesData])
+	[imageDataState.imagesData, 
+	fetchImages, imageLoadingService])
 
 	useEffect(() => 
 	{
 		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: 0})
 		fetchImages()
 	},
-	[imagesPath])
+	[imagesPath, 
+	fetchImages, appStateDispatch])
 
 	return (
 		<div className={classes.container}>

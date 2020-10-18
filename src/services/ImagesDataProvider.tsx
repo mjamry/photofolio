@@ -76,10 +76,10 @@ const useDataProviderHelper = () => {
             return []
         }
 
-        const detailsFile = data.find(d => d.mimeType == FileMimeTypes.json)
+        const detailsFile = data.find(d => d.mimeType === FileMimeTypes.json)
 
         return new Promise<ImagesDetailsDTO[]>((resolve, reject) => {
-            const response = gapi.client.drive.files.get({
+            gapi.client.drive.files.get({
                 fileId: detailsFile?.id || '',
                 alt: 'media',
             })
@@ -94,7 +94,7 @@ const useDataProviderHelper = () => {
 
     const getImagesDataWithDetails = (data: ImageDataDTO[], details: ImagesDetailsDTO[]): ImageDTO[] => {
         return data.reduce<ImageDTO[]>((result, img) => {
-            const imgDetails = details.find(i => i.name == img.name)
+            const imgDetails = details.find(i => i.name === img.name)
             if(imgDetails){
                 result.push({...img, ...imgDetails})
             }
