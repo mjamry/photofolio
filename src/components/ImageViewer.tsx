@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import {makeStyles} from '@material-ui/core/styles'
-import Loader from './Loader'
 import { useImageLoadingState } from '../state/AppState'
 import { ImageLoadingStep } from '../state/ImageLoadingState'
 import {Theme} from '../ThemeProvider'
-
-import { useImageLoadingService } from '../services/ImageLoadingService'
 
 type Props = UIProps & {
     imageSrc: string
@@ -61,8 +58,7 @@ const ImageViewer = (props: Props) => {
     const [animationClass, setAnimationClass] = useState("")
 
     const imageLoading = useImageLoadingState()
-    const imageLoadingService = useImageLoadingService()
- 
+
     useEffect(() =>{
         imageRef.current!.src = props.imageSrc
     }, [props.imageSrc])
