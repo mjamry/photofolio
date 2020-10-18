@@ -75,7 +75,9 @@ const ImageViewer = (props: Props) => {
         }
         setAnimationClass(animation)
 
-    }, [imageLoading.currentStep])
+    }, 
+    [imageLoading.currentStep, 
+    classes])
 
     return (
         <div className={classes.container}>

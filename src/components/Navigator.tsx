@@ -96,7 +96,9 @@ const Navigator = (props: Props) => {
                 setAnimation(classes.fadeInAnimation)
                 break
         }
-    }, [imageLoadingState.currentStep])
+    }, 
+    [imageLoadingState.currentStep, 
+    classes])
 
     return (
         <div className={`
