@@ -86,7 +86,7 @@ export const InitialSettingsState: SettingsState =
             default: '1cUV01b_dhLFTnN0ZRhWoQWP0rmqU0fd5'
         },
         people: {
-            default: '0B6Fw2L7BBXZTQUQtOUZrLWF2TWc'
+            default: '1za6v4vAunRmoSj04WYyPrsPtWXGwhU9M'
         }
     },
 
