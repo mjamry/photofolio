@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {makeStyles} from '@material-ui/core/styles'
-import { Button } from '@material-ui/core'
 import ImageIndicator from './ImageIndicator'
 import ImageNavigation from './ImageNavigation'
 import { useImageDataState, useImagesPathsSettingsState, useImageLoadingState, useImageViewerSettings } from '../state/AppState'
@@ -97,7 +96,7 @@ const Navigator = (props: Props) => {
                 setAnimation(classes.fadeInAnimation)
                 break
         }
-    }, [imageLoadingState.currentStep])
+    }, [classes.fadeInAnimation, classes.fadeOutAnimation, imageLoadingState.currentStep])
 
     return (
         <div className={`
