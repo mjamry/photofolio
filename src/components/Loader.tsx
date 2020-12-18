@@ -1,10 +1,9 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles'
+import {makeStyles, Theme} from '@material-ui/core/styles'
 import LoaderElement from './LoaderElement';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {useImageLoadingState, useLoaderSettingsState} from './../state/AppState'
 import { ImageLoadingStep } from '../state/ImageLoadingState';
-import {Theme} from '../ThemeProvider'
 
 const useStyles = makeStyles((theme: Theme) => ({
     container: {

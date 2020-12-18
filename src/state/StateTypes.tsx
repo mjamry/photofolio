@@ -1,6 +1,6 @@
-import { SettingsState, SettingsStateActions } from "./SettingsState"
-import { ImageLoadingState, ImageLoadingStateActions } from "./ImageLoadingState"
-import { ImageDataStateActions, ImageDataState } from "./ImageDataState"
+import { SettingsState } from "./SettingsState"
+import { ImageLoadingState } from "./ImageLoadingState"
+import { ImageDataState } from "./ImageDataState"
 
 //APP STATE
 export type AppState = {
