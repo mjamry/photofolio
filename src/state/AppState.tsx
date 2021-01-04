@@ -1,142 +1,116 @@
-import React, {createContext, useContext, useReducer} from 'react'
-import {AppState, AppStateReducerAction, AppDispatch } from './StateTypes'
-import { ImageLoadingStep, ImageLoadingState, ImageLoadingStateActions } from './ImageLoadingState'
-import { SettingsState, InitialSettingsState } from './SettingsState'
-import { ImageDataState, ImageDataStateActions, ThemeType } from './ImageDataState'
+import React, { createContext, useContext, useReducer } from 'react';
+import { AppState, AppStateReducerAction, AppDispatch } from './StateTypes';
+import { ImageLoadingStep, ImageLoadingState, ImageLoadingStateActions } from './ImageLoadingState';
+import { SettingsState, InitialSettingsState } from './SettingsState';
+import { ImageDataState, ImageDataStateActions, ThemeType } from './ImageDataState';
 
 type Props = {
-    children: React.ReactNode,
-}
+  children: React.ReactNode,
+};
 
 const initialState: AppState = {
-    settings: InitialSettingsState,
-    imageLoading: {
-        currentStep: ImageLoadingStep.none
-    },
-    imageData: {
-        currentImageIndex: 0,
-        imagesData: [],
-        uiTheme: ThemeType.light,
-    }
-}
+  settings: InitialSettingsState,
+  imageLoading: {
+    currentStep: ImageLoadingStep.none,
+  },
+  imageData: {
+    currentImageIndex: 0,
+    imagesData: [],
+    uiTheme: ThemeType.light,
+  },
+};
 
-//REDUCERS
+// REDUCERS
 
-const _animationReducer = (state: ImageLoadingState, action: AppStateReducerAction) => {
-    switch(action.type) {
-        case ImageLoadingStateActions.setStep: 
-            state = {...state, currentStep: action.payload}
-            break
-    }
+const animationReducer = (state: ImageLoadingState, action: AppStateReducerAction) => {
+  switch (action.type) {
+    case ImageLoadingStateActions.setStep:
+      return { ...state, currentStep: action.payload };
+    default:
+      return state;
+  }
+};
 
-    return state
-}
+const settingsReducer = (state: SettingsState, action: AppStateReducerAction) => state;
 
-const _settingsReducer = (state: SettingsState, action: AppStateReducerAction) => {
-    return state
-}
+const imageDataReducer = (state: ImageDataState, action: AppStateReducerAction) => {
+  switch (action.type) {
+    case ImageDataStateActions.setCurrentIndex:
+      return { ...state, currentImageIndex: action.payload };
+    case ImageDataStateActions.setImageData:
+      return { ...state, imagesData: action.payload };
+    case ImageDataStateActions.setUiTheme:
+      return { ...state, uiTheme: action.payload };
+    default:
+      return state;
+  }
+};
 
-const _imageDataReducer = (state: ImageDataState, action: AppStateReducerAction) => {
-    switch(action.type) {
-        case ImageDataStateActions.setCurrentIndex:
-            state = {...state, currentImageIndex: action.payload}
-            break
-        case ImageDataStateActions.setImageData: 
-            state = {...state, imagesData: action.payload}
-            break
-        case ImageDataStateActions.setUiTheme:
-            state = {...state, uiTheme: action.payload}
-            break
-    }
-    
-    return state
-}
+const reducer = (state: AppState, action: AppStateReducerAction) => ({
+  imageLoading: animationReducer(state.imageLoading, action),
+  settings: settingsReducer(state.settings, action),
+  imageData: imageDataReducer(state.imageData, action),
+});
 
-
-const _reducer = (state: AppState, action: AppStateReducerAction) => {
-    return {
-        imageLoading: _animationReducer(state.imageLoading, action),
-        settings: _settingsReducer(state.settings, action),
-        imageData: _imageDataReducer(state.imageData, action)
-    }
-}
-
-//PROVIDER
-
-const AppStateProvider = ({children}: Props) => {
-    const [state, dispatch] = useReducer(_reducer, initialState)
-    return (
-        <AppDispatchContext.Provider value={dispatch}>
-            <AppStateContext.Provider value={state}>
-                {children}
-            </AppStateContext.Provider>
-        </AppDispatchContext.Provider>
-    )
-}
-
+// PROVIDER
 const AppStateContext = createContext<AppState | undefined>(undefined);
 const AppDispatchContext = createContext<AppDispatch | undefined>(undefined);
 
-//SELECTORS
+const AppStateProvider = ({ children }: Props) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <AppDispatchContext.Provider value={dispatch}>
+      <AppStateContext.Provider value={state}>
+        {children}
+      </AppStateContext.Provider>
+    </AppDispatchContext.Provider>
+  );
+};
+
+// SELECTORS
 export {
-    useImageLoadingState, 
-    useSettingsState, 
-    useLoaderSettingsState, 
-    useImageViewerSettings, 
-    useImageDataState, 
-    useGapiClientSettingsState,
-    useImagesPathsSettingsState,
-    useImageIndicatorSettings
-}
+  useImageLoadingState,
+  useSettingsState,
+  useLoaderSettingsState,
+  useImageViewerSettings,
+  useImageDataState,
+  useGapiClientSettingsState,
+  useImagesPathsSettingsState,
+  useImageIndicatorSettings,
+};
 
 const useAppState = () => {
-    const context = useContext(AppStateContext)
-    if(context === undefined){
-        throw new Error("AppStateContext must be used with provider")
-    }
+  const context = useContext(AppStateContext);
+  if (context === undefined) {
+    throw new Error('AppStateContext must be used with provider');
+  }
 
-    return context
-}
+  return context;
+};
 
-const useImageDataState = () => {
-    return useAppState().imageData
-}
+const useImageDataState = () => useAppState().imageData;
 
-const useImageLoadingState = () => {
-    return useAppState().imageLoading
-}
+const useImageLoadingState = () => useAppState().imageLoading;
 
-const useSettingsState = () => {
-    return useAppState().settings
-}
+const useSettingsState = () => useAppState().settings;
 
-const useLoaderSettingsState = () => {
-    return useAppState().settings.loader
-}
+const useLoaderSettingsState = () => useAppState().settings.loader;
 
-const useGapiClientSettingsState = () => {
-    return useAppState().settings.gapiClient
-}
+const useGapiClientSettingsState = () => useAppState().settings.gapiClient;
 
-const useImagesPathsSettingsState = () => {
-    return useAppState().settings.imagesPaths
-}
+const useImagesPathsSettingsState = () => useAppState().settings.imagesPaths;
 
-const useImageViewerSettings = () => {
-    return useAppState().settings.imageViewer
-}
+const useImageViewerSettings = () => useAppState().settings.imageViewer;
 
-const useImageIndicatorSettings = () => {
-    return useAppState().settings.imageIndicator
-}
+const useImageIndicatorSettings = () => useAppState().settings.imageIndicator;
 
 const useAppDispatch = () => {
-    const context = useContext(AppDispatchContext)
-    if(context === undefined){
-        throw new Error("AppDispatchContext must be used with provider")
-    }
+  const context = useContext(AppDispatchContext);
+  if (context === undefined) {
+    throw new Error('AppDispatchContext must be used with provider');
+  }
 
-    return context
-}
+  return context;
+};
 
-export {AppStateProvider, useAppDispatch}
+export { AppStateProvider, useAppDispatch };

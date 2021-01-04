@@ -1,15 +1,14 @@
 export type ImageLoadingState = {
-    currentStep: ImageLoadingStep,
-}
+  currentStep: ImageLoadingStep,
+};
 
 export enum ImageLoadingStep {
-    preLoading,
-    postLoading,
-    loading,
-    none
+  preLoading,
+  postLoading,
+  loading,
+  none,
 }
-
 
 export const ImageLoadingStateActions = {
-    setStep: 'setStep',
-}
+  setStep: 'setStep',
+};
