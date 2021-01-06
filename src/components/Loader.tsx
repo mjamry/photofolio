@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexFlow: 'row',
     height: '100%',
   },
-  loaderContainer: (props) => ({
+  loaderContainer: () => ({
     width: '100%',
     height: '100%',
     backgroundColor: theme.palette.secondary.main,

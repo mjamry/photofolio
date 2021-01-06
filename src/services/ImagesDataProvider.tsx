@@ -13,6 +13,47 @@ export type ImagesDataProvider = {
   fetchImagesData: (locationId: string) => void,
 };
 
+const useDataProviderHelper = () => {
+  const getDetails = async (data: ImageDataDTO[]): Promise<ImagesDetailsDTO[]> => {
+    if (!gapi.client) {
+      console.log('GAPI client not yet initialized');
+      return [];
+    }
+
+    const detailsFile = data.find((d) => d.mimeType === FileMimeTypes.json);
+
+    return new Promise<ImagesDetailsDTO[]>((resolve) => {
+      gapi.client.drive.files.get({
+        fileId: detailsFile?.id || '',
+        alt: 'media',
+      })
+        .then((response) => {
+          resolve(response.result as ImagesDetailsDTO[]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  };
+
+  const getImagesDataWithDetails = (
+    data: ImageDataDTO[],
+    details: ImagesDetailsDTO[],
+  ) : ImageDTO[] => data.reduce<ImageDTO[]>((result, img) => {
+    const imgDetails = details.find((i) => i.name === img.name);
+    if (imgDetails) {
+      result.push({ ...img, ...imgDetails });
+    }
+
+    return result;
+  }, []);
+
+  return {
+    getDetails,
+    getImagesDataWithDetails,
+  };
+};
+
 export const useImagesDataProvider = (): ImagesDataProvider => {
   const dispatchState = useAppDispatch();
   const settings = useGapiClientSettingsState();
@@ -63,46 +104,5 @@ export const useImagesDataProvider = (): ImagesDataProvider => {
   return {
     initialize,
     fetchImagesData,
-  };
-};
-
-const useDataProviderHelper = () => {
-  const getDetails = async (data: ImageDataDTO[]): Promise<ImagesDetailsDTO[]> => {
-    if (!gapi.client) {
-      console.log('GAPI client not yet initialized');
-      return [];
-    }
-
-    const detailsFile = data.find((d) => d.mimeType === FileMimeTypes.json);
-
-    return new Promise<ImagesDetailsDTO[]>((resolve, reject) => {
-      gapi.client.drive.files.get({
-        fileId: detailsFile?.id || '',
-        alt: 'media',
-      })
-        .then((response) => {
-          resolve(response.result as ImagesDetailsDTO[]);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  };
-
-  const getImagesDataWithDetails = (
-    data: ImageDataDTO[],
-    details: ImagesDetailsDTO[],
-  ) : ImageDTO[] => data.reduce<ImageDTO[]>((result, img) => {
-    const imgDetails = details.find((i) => i.name === img.name);
-    if (imgDetails) {
-      result.push({ ...img, ...imgDetails });
-    }
-
-    return result;
-  }, []);
-
-  return {
-    getDetails,
-    getImagesDataWithDetails,
   };
 };

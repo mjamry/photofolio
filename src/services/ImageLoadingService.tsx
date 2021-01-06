@@ -20,7 +20,7 @@ export const useImageLoadingHelper = () => {
     appDispatch({ type: ImageLoadingStateActions.setStep, payload: action });
   };
 
-  const preLoad = async (): Promise<void> => new Promise<void>((resolve, reject) => {
+  const preLoad = async (): Promise<void> => new Promise<void>((resolve) => {
     clearTimeout(timer);
     setAction(ImageLoadingStep.preLoading);
 
@@ -39,7 +39,7 @@ export const useImageLoadingHelper = () => {
     );
   };
 
-  const load = async (index: number): Promise<string> => new Promise<string>((resolve, reject) => {
+  const load = async (index: number): Promise<string> => new Promise<string>((resolve) => {
     const imageSrc = imageDataState.imagesData[index].webContentLink;
 
     const img = new Image();

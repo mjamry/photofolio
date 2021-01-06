@@ -81,7 +81,9 @@ type UIProps = {
 };
 
 const Navigator = (props: Props) => {
-  const { handleItemSelected, handleNext, handleBefore, handleSelectPath } = props;
+  const {
+    handleItemSelected, handleNext, handleBefore, handleSelectPath,
+  } = props;
   const imageViewerSettings = useImageViewerSettings();
   const classes = useStyles(imageViewerSettings as UIProps);
   const [animation, setAnimation] = useState('');

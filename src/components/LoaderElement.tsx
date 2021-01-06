@@ -55,7 +55,7 @@ const LoaderElement = (props: Props) => {
   const { action } = props;
   const classes = useStyles(props);
   const animationClass = action === ImageLoadingStep.preLoading
-    ? classes.fadeInAnimation 
+    ? classes.fadeInAnimation
     : classes.fadeOutAnimation;
 
   return (
