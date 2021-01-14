@@ -25,7 +25,7 @@
     "dev": "react-scripts start",
     "start": "serve -s build",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .tsx",
     "lint-fix": "eslint . --ext .tsx --fix"
