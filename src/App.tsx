@@ -1,118 +1,114 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import {makeStyles} from "@material-ui/core/styles"
+import React, { useCallback, useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-import ImageViewer from "./components/ImageViewer"
+
+import ImageViewer from './components/ImageViewer';
 import './App.css';
-import { useImageViewerSettings, useImageDataState, useAppDispatch, useImagesPathsSettingsState } from './state/AppState';
+import {
+  useImageViewerSettings, useImageDataState, useAppDispatch, useImagesPathsSettingsState,
+} from './state/AppState';
 import { useImagesDataProvider } from './services/ImagesDataProvider';
 import { ImageDataStateActions } from './state/ImageDataState';
 import { useImageLoadingService } from './services/ImageLoadingService';
 import StackContainer from './components/StackContainer';
 import Loader from './components/Loader';
 import Navigator from './components/Navigator';
-import ThemeProvider from './ThemeProvider'
-
+import ThemeProvider from './ThemeProvider';
 
 const useStyles = makeStyles({
-	container: {
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginTop: '10vh',
-	},
-})
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '10vh',
+  },
+});
 
 const App = () => {
-	const classes = useStyles();
+  const classes = useStyles();
 
-	const imaveViewerSettings = useImageViewerSettings()
-	const imagesDataProvider = useImagesDataProvider()
-	const imageDataState = useImageDataState()
-	const appStateDispatch = useAppDispatch()
-	const imageLoadingService = useImageLoadingService()
-	const imagesPaths = useImagesPathsSettingsState()
+  const imageViewerSettings = useImageViewerSettings();
+  const imagesDataProvider = useImagesDataProvider();
+  const imageDataState = useImageDataState();
+  const appStateDispatch = useAppDispatch();
+  const imageLoadingService = useImageLoadingService();
+  const imagesPaths = useImagesPathsSettingsState();
 
-	const [image, setImage] = useState<string>('');
-	const [imagesPath, setImagesPath] = useState<string>(imagesPaths.landscapes.default)
-	
-	const handleNext = async () => {
-		const imgSrc = await imageLoadingService.loadNext()
-		setImage(imgSrc)
-	}
+  const [image, setImage] = useState<string>('');
+  const [imagesPath, setImagesPath] = useState<string>(imagesPaths.landscapes.default);
 
-	const handleBefore = async () => {
-		const imgSrc = await imageLoadingService.loadBefore()
-		setImage(imgSrc)
-	}
+  const handleNext = async () => {
+    const imgSrc = await imageLoadingService.loadNext();
+    setImage(imgSrc);
+  };
 
-	const handleItemSelected = async (index: number) => {
-		const imgSrc = await imageLoadingService.loadCustom(index)
-		setImage(imgSrc)
-	}
+  const handleBefore = async () => {
+    const imgSrc = await imageLoadingService.loadBefore();
+    setImage(imgSrc);
+  };
 
-	const fetchImages = useCallback(async () => {
-		await imagesDataProvider.fetchImagesData(imagesPath)
-	}, 
-	[imagesDataProvider, imagesPath])
+  const handleItemSelected = async (index: number) => {
+    const imgSrc = await imageLoadingService.loadCustom(index);
+    setImage(imgSrc);
+  };
 
-	useEffect(() => {
-		const initialize = async () => {
-			await imagesDataProvider.initialize()
-			fetchImages()
-		}
+  const fetchImages = useCallback(async () => {
+    await imagesDataProvider.fetchImagesData(imagesPath);
+  }, [imagesDataProvider, imagesPath]);
 
-		initialize();
-	}, [fetchImages, imagesDataProvider])
+  useEffect(() => {
+    const initialize = async () => {
+      await imagesDataProvider.initialize();
+      fetchImages();
+    };
 
-	useEffect(()=>
-	{
-		const setCurrentImage = async () => {
-			if(imageDataState.imagesData.length > 0){
-				const imgSrc = await imageLoadingService.loadCustom(0)
-				setImage(imgSrc)
-			}
-		}
+    initialize();
+  }, [fetchImages, imagesDataProvider]);
 
-		setCurrentImage()
-	}, 
-	[imageDataState.imagesData, 
-	fetchImages, imageLoadingService])
+  useEffect(() => {
+    const setCurrentImage = async () => {
+      if (imageDataState.imagesData.length > 0) {
+        const imgSrc = await imageLoadingService.loadCustom(0);
+        setImage(imgSrc);
+      }
+    };
 
-	useEffect(() => 
-	{
-		appStateDispatch({type: ImageDataStateActions.setCurrentIndex, payload: 0})
-		fetchImages()
-	},
-	[imagesPath, 
-	fetchImages, appStateDispatch])
+    setCurrentImage();
+  },
+  [imageDataState.imagesData, imageLoadingService]);
 
-	return (
-		<div className={classes.container}>
-			<ThemeProvider>
-				<StackContainer
-					height={imaveViewerSettings.height}
-					width={imaveViewerSettings.width}
-				>
-					<Navigator 
-						handleNext={handleNext} 
-						handleBefore={handleBefore} 
-						handleItemSelected={handleItemSelected}
-						handleSelectPath={setImagesPath}
-					/>
+  useEffect(() => {
+    appStateDispatch({ type: ImageDataStateActions.setCurrentIndex, payload: 0 });
+    fetchImages();
+  },
+  [appStateDispatch, fetchImages, imagesPath]);
 
-					<Loader/>
-					
-					<ImageViewer 
-						imageSrc={image} 
-						duration={`${imaveViewerSettings.duration/1000}s`}
-						timingFunction={imaveViewerSettings.timingFunction}
-					/>
-						
-				</StackContainer>
-			</ThemeProvider>
-		</div>
-	)
-}
+  return (
+    <div className={classes.container}>
+      <ThemeProvider>
+        <StackContainer
+          height={imageViewerSettings.height}
+          width={imageViewerSettings.width}
+        >
+          <Navigator
+            handleNext={handleNext}
+            handleBefore={handleBefore}
+            handleItemSelected={handleItemSelected}
+            handleSelectPath={setImagesPath}
+          />
+
+          <Loader />
+
+          <ImageViewer
+            imageSrc={image}
+            duration={`${imageViewerSettings.duration / 1000}s`}
+            timingFunction={imageViewerSettings.timingFunction}
+          />
+
+        </StackContainer>
+      </ThemeProvider>
+    </div>
+  );
+};
 
 export default App;
-
