@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - env/prepare-prod-env
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -18,7 +19,7 @@ jobs:
     - name: Set up Node.js version
       uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '14.x'
 
     - name: npm install, build, and test
       run: |
@@ -31,5 +32,5 @@ jobs:
       with:
         app-name: 'mjamry-photos'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_685cf4c77dbb4b909c7d15a28823a817 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_a9e324df2cc24ece810b46dfebc5558a }}
         package: .
